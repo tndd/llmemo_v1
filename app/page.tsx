@@ -1,8 +1,10 @@
 "use client";
 import IconSidebar from '@/components/IconSidebar';
-import MainSidebar from '@/components/MainSidebar';
-import MessageInput from '@/components/MessageInput';
-import MessageList from '@/components/MessageList';
+import MainSidebar from '@/components/home/MainSidebar';
+import MessageInput from '@/components/home/MessageInput';
+import MessageList from '@/components/home/MessageList';
+import LibraryView from '@/components/library/LibraryView';
+import StatsView from '@/components/stats/StatsView';
 import { Message } from '@/types'; // Assuming types are in @/types
 import { useState } from 'react';
 
@@ -73,28 +75,8 @@ export default function Home() {
           </div>
         </>
       )}
-      {currentView === 'library' && (
-        <div className="flex flex-col flex-grow h-full bg-white">
-          <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
-            <h2 className="text-xl font-semibold">Library View</h2>
-            <div>{/* Search or other icons removed */}</div>
-          </div>
-          <div className="p-6">
-            {/* Placeholder for Library content */}
-          </div>
-        </div>
-      )}
-      {currentView === 'stats' && (
-        <div className="flex flex-col flex-grow h-full bg-white">
-          <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
-            <h2 className="text-xl font-semibold">Stats View</h2>
-            <div>{/* Search or other icons removed */}</div>
-          </div>
-          <div className="p-6">
-            {/* Placeholder for Stats content */}
-          </div>
-        </div>
-      )}
+      {currentView === 'library' && <LibraryView />}
+      {currentView === 'stats' && <StatsView />}
     </div>
   );
 }
