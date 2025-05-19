@@ -1,6 +1,52 @@
+"use client";
 import Image from "next/image";
+import { useState } from 'react';
+
+interface Message {
+  id: number;
+  user: string;
+  avatar: string;
+  time: string;
+  text: string;
+}
 
 export default function Home() {
+  const [inputValue, setInputValue] = useState('');
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      user: "Alice",
+      avatar: "/next.svg",
+      time: "10:00 AM",
+      text: "こんにちは！これはサンプルメッセージです。",
+    },
+    {
+      id: 2,
+      user: "Bob",
+      avatar: "/next.svg",
+      time: "10:02 AM",
+      text: "これは別のサンプルメッセージです。Slack風のUIですね！",
+    },
+  ]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSendMessage = () => {
+    if (inputValue.trim() === '') return;
+
+    const newMessage: Message = {
+      id: messages.length + 1,
+      user: "Your Name", // Replace with actual user name
+      avatar: "/next.svg", // Replace with actual user avatar
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      text: inputValue,
+    };
+
+    setMessages([...messages, newMessage]);
+    setInputValue('');
+  };
   return (
     <div className="flex h-screen antialiased text-gray-800">
       {/* Sidebar */}
@@ -47,29 +93,22 @@ export default function Home() {
         </div>
 
         {/* Messages Area */}
-        <div className="flex-grow p-6 space-y-4 overflow-y-auto bg-gray-50">
-          {/* Example Message */}
-          <div className="flex items-start space-x-3">
-            <Image src="/next.svg" alt="User Avatar" width={40} height={40} className="rounded-full bg-gray-300 p-1" />
-            <div>
-              <div className="flex items-baseline space-x-2">
-                <span className="font-semibold">Alice</span>
-                <span className="text-xs text-gray-500">10:00 AM</span>
+        {/* Scrollable messages container */}
+        <div className="flex-grow p-6 space-y-4 overflow-y-auto bg-gray-50" style={{ maxHeight: 'calc(100vh - 128px - 68px)' }}> {/* Adjust maxHeight considering header and input area height */}
+          {/* Render messages from state */}
+          {messages.map((msg) => (
+            <div key={msg.id} className="flex items-start space-x-3">
+              <Image src={msg.avatar} alt={`${msg.user} Avatar`} width={40} height={40} className="rounded-full bg-gray-300 p-1" />
+              <div>
+                <div className="flex items-baseline space-x-2">
+                  <span className="font-semibold">{msg.user}</span>
+                  <span className="text-xs text-gray-500">{msg.time}</span>
+                </div>
+                <p className="text-gray-700">{msg.text}</p>
               </div>
-              <p className="text-gray-700">こんにちは！これはサンプルメッセージです。</p>
             </div>
-          </div>
-          <div className="flex items-start space-x-3">
-            <Image src="/next.svg" alt="User Avatar" width={40} height={40} className="rounded-full bg-gray-300 p-1" />
-            <div>
-              <div className="flex items-baseline space-x-2">
-                <span className="font-semibold">Bob</span>
-                <span className="text-xs text-gray-500">10:02 AM</span>
-              </div>
-              <p className="text-gray-700">これは別のサンプルメッセージです。Slack風のUIですね！</p>
-            </div>
-          </div>
-          {/* More messages here */}
+          ))}
+          {/* More messages will be dynamically added here */}
         </div>
 
         {/* Message Input Area */}
@@ -79,8 +118,14 @@ export default function Home() {
               type="text"
               placeholder="Message #general"
               className="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
             />
-            <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            <button
+              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onClick={handleSendMessage}
+            >
               Send
             </button>
           </div>
