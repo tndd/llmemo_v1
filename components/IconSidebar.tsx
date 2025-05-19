@@ -10,7 +10,7 @@ interface IconSidebarProps {
 
 const IconSidebar: React.FC<IconSidebarProps> = ({ onViewChange }) => {
   return (
-    <div className="flex flex-col items-center w-16 bg-gray-800 text-white py-4 space-y-3">
+    <div className="flex flex-col items-center w-16 bg-gray-800 text-white py-4 space-y-3 flex-shrink-0">
       {/* Placeholder for icons - replace with actual icons later */}
       <div onClick={() => onViewChange('home')} className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-600">H</div> {/* Home */}
       <div onClick={() => onViewChange('library')} className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-600">L</div> {/* Library */}
