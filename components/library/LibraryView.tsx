@@ -1,13 +1,11 @@
 // components/views/LibraryView.tsx
 import React from 'react';
+import MainSidebarPlaceholder from '../MainSidebarPlaceholder';
 
 const LibraryView: React.FC = () => {
   return (
     <div className="flex flex-row flex-grow h-full">
-      {/* MainSidebarPlaceholder content */}
-      <div className="flex flex-col w-64 bg-slate-800 text-white">
-        {/* This is a placeholder for the main sidebar */}
-      </div>
+      <MainSidebarPlaceholder />
       {/* Existing LibraryView content */}
       <div className="flex flex-col flex-grow h-full bg-white">
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
