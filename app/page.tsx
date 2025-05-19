@@ -19,11 +19,7 @@ export default function Home() {
     <div className="flex h-screen antialiased text-gray-800">
       <IconSidebar onViewChange={handleViewChange} />
       {currentView === 'home' && <HomeView />}
-      {currentView === 'library' && (
-        <>
-          <LibraryView />
-        </>
-      )}
+      {currentView === 'library' && <LibraryView />}
       {currentView === 'stats' && <StatsView />}
     </div>
   );
