@@ -1,11 +1,11 @@
 // components/MainSidebar.tsx
 import React from 'react';
 
-import MainSidebarPlaceholder from '../MainSidebarPlaceholder';
+import MainSidebarLayout from '../MainSidebarLayout';
 
 const MainSidebar: React.FC = () => {
   return (
-    <MainSidebarPlaceholder>
+    <MainSidebarLayout>
       <div className="flex items-center justify-center h-16 border-b border-gray-700">
         <span className="text-xl font-semibold">LLMemo</span>
       </div>
@@ -32,7 +32,7 @@ const MainSidebar: React.FC = () => {
         </div>
       </div>
       {/* User Info Section Removed */}
-    </MainSidebarPlaceholder>
+    </MainSidebarLayout>
   );
 };
 
