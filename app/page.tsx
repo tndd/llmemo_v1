@@ -83,17 +83,11 @@ export default function Home() {
             </ul>
           </div>
         </div>
-        <div className="p-4 border-t border-gray-700">
-          {/* User Info */}
-          <div className="flex items-center space-x-2">
-            <Image src="/next.svg" alt="User Avatar" width={32} height={32} className="rounded-full bg-white p-1" />
-            <span className="font-semibold">Your Name</span>
-          </div>
-        </div>
+        {/* User Info Section Removed */}
       </div>
 
       {/* Main Content Area */}
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow h-full bg-white">
         {/* Header */}
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
           <h2 className="text-xl font-semibold"># general</h2>
@@ -104,7 +98,7 @@ export default function Home() {
 
         {/* Messages Area */}
         {/* Scrollable messages container */}
-        <div className="flex-grow p-6 space-y-4 overflow-y-auto bg-gray-50" style={{ maxHeight: 'calc(100vh - 128px - 68px)' }}> {/* Adjust maxHeight considering header and input area height */}
+        <div className="flex-grow p-6 space-y-4 overflow-y-auto"> {/* Adjusted height and background */}
           {/* Render messages from state */}
           {messages.map((msg) => (
             <div key={msg.id} className="flex items-start space-x-3">
