@@ -64,6 +64,9 @@ export default function Home() {
         <div className="flex items-center justify-center h-16 border-b border-gray-700">
           <span className="text-xl font-semibold">LLMemo</span>
         </div>
+        <div className="p-4">
+          <input type="text" placeholder="Search" className="w-full px-3 py-2 border border-gray-600 rounded-md text-sm bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500" />
+        </div>
         <div className="flex-grow p-4 space-y-2 overflow-y-auto">
           {/* Channels */}
           <div>
@@ -91,9 +94,7 @@ export default function Home() {
         {/* Header */}
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
           <h2 className="text-xl font-semibold"># general</h2>
-          <div>{/* Search or other icons */}
-            <input type="text" placeholder="Search" className="px-3 py-1 border border-gray-300 rounded-md text-sm" />
-          </div>
+          <div>{/* Search or other icons removed */}</div>
         </div>
 
         {/* Messages Area */}
