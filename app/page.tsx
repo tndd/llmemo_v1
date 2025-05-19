@@ -1,6 +1,5 @@
 "use client";
 import IconSidebar from '@/components/IconSidebar';
-import MainSidebarPlaceholder from '@/components/MainSidebarPlaceholder';
 import MainSidebar from '@/components/home/MainSidebar';
 import MessageInput from '@/components/home/MessageInput';
 import MessageList from '@/components/home/MessageList';
@@ -78,7 +77,6 @@ export default function Home() {
       )}
       {currentView === 'library' && (
         <>
-          <MainSidebarPlaceholder />
           <LibraryView />
         </>
       )}
