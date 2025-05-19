@@ -6,7 +6,11 @@ import MessageList from '@/components/MessageList';
 import { Message } from '@/types'; // Assuming types are in @/types
 import { useState } from 'react';
 
+// Define view types
+type View = 'home' | 'library' | 'stats';
+
 export default function Home() {
+  const [currentView, setCurrentView] = useState<View>('home');
   const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -44,23 +48,53 @@ export default function Home() {
     setInputValue('');
   };
 
+  const handleViewChange = (view: View) => {
+    setCurrentView(view);
+  };
+
   return (
     <div className="flex h-screen antialiased text-gray-800">
-      <IconSidebar />
-      <MainSidebar />
-      <div className="flex flex-col flex-grow h-full bg-white">
-        {/* Header */}
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
-          <h2 className="text-xl font-semibold"># general</h2>
-          <div>{/* Search or other icons removed */}</div>
+      <IconSidebar onViewChange={handleViewChange} />
+      {currentView === 'home' && (
+        <>
+          <MainSidebar />
+          <div className="flex flex-col flex-grow h-full bg-white">
+            {/* Header */}
+            <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
+              <h2 className="text-xl font-semibold"># general</h2>
+              <div>{/* Search or other icons removed */}</div>
+            </div>
+            <MessageList messages={messages} />
+            <MessageInput
+              inputValue={inputValue}
+              onInputChange={handleInputChange}
+              onSendMessage={handleSendMessage}
+            />
+          </div>
+        </>
+      )}
+      {currentView === 'library' && (
+        <div className="flex flex-col flex-grow h-full bg-white">
+          <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
+            <h2 className="text-xl font-semibold">Library View</h2>
+            <div>{/* Search or other icons removed */}</div>
+          </div>
+          <div className="p-6">
+            {/* Placeholder for Library content */}
+          </div>
         </div>
-        <MessageList messages={messages} />
-        <MessageInput
-          inputValue={inputValue}
-          onInputChange={handleInputChange}
-          onSendMessage={handleSendMessage}
-        />
-      </div>
+      )}
+      {currentView === 'stats' && (
+        <div className="flex flex-col flex-grow h-full bg-white">
+          <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
+            <h2 className="text-xl font-semibold">Stats View</h2>
+            <div>{/* Search or other icons removed */}</div>
+          </div>
+          <div className="p-6">
+            {/* Placeholder for Stats content */}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
