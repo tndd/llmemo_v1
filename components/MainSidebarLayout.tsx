@@ -1,11 +1,11 @@
-// components/MainSidebarPlaceholder.tsx
+// components/MainSidebarLayout.tsx
 import React from 'react';
 
-interface MainSidebarPlaceholderProps {
+interface MainSidebarLayoutProps {
   children?: React.ReactNode;
 }
 
-const MainSidebarLayout: React.FC<MainSidebarPlaceholderProps> = ({ children }) => {
+const MainSidebarLayout: React.FC<MainSidebarLayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col w-[256px] bg-slate-800 text-white">
       {children}
