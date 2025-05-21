@@ -1,6 +1,6 @@
 // components/views/LibraryView.tsx
+import { containerClasses, contentClasses, headerClasses, titleClasses } from '@/styles';
 import React from 'react';
-import { containerClasses, contentClasses, headerClasses, titleClasses } from '../common/styles';
 import MainSidebarLayout from '../MainSidebarLayout';
 
 

@@ -1,6 +1,6 @@
 // components/settings/SettingsView.tsx
+import { containerClasses, titleClasses } from '@/styles';
 import React from 'react';
-import { containerClasses, titleClasses } from '../common/styles';
 
 const SettingsView: React.FC = () => {
   return (

@@ -1,6 +1,6 @@
 // components/views/StatsView.tsx
+import { containerClasses, contentClasses, headerClasses, titleClasses } from '@/styles';
 import React from 'react';
-import { containerClasses, contentClasses, headerClasses, titleClasses } from '../common/styles';
 
 const StatsView: React.FC = () => {
   return (
