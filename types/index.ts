@@ -4,6 +4,7 @@ export interface Message {
   avatar: string;
   time: string;
   text: string;
+  tags?: string[];
 }
 
 export type View = "home" | "library" | "stats" | "settings";

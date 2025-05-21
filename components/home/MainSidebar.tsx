@@ -4,7 +4,10 @@ import React from "react";
 
 import MainSidebarLayout from "../MainSidebarLayout";
 
-const MainSidebar: React.FC = () => {
+// MainSidebarProps is now empty or can be removed if no props are needed
+interface MainSidebarProps {}
+
+const MainSidebar: React.FC<MainSidebarProps> = (/* props can be removed if MainSidebarProps is empty */) => {
   const headerClasses = clsx(
     "flex items-center justify-center h-16",
     "border-b border-gray-700",
@@ -84,6 +87,7 @@ const MainSidebar: React.FC = () => {
             </li>
           </ul>
         </div>
+        {/* Tags section removed */}
       </div>
       {/* User Info Section Removed */}
     </MainSidebarLayout>
