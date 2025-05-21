@@ -3,6 +3,7 @@ import MainSidebar from '@/components/home/MainSidebar';
 import MessageInput from '@/components/home/MessageInput';
 import MessageList from '@/components/home/MessageList';
 import { Message } from '@/types'; // Assuming types are in @/types
+import clsx from "clsx";
 import React, { useState } from 'react';
 
 const HomeView: React.FC = () => {
@@ -46,10 +47,10 @@ const HomeView: React.FC = () => {
   return (
     <>
       <MainSidebar />
-      <div className="flex flex-col flex-grow h-full bg-white">
+      <div className={clsx("flex flex-col flex-grow h-full bg-white")}>
         {/* Header */}
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white">
-          <h2 className="text-xl font-semibold"># general</h2>
+        <div className={clsx("flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white")}>
+          <h2 className={clsx("text-xl font-semibold")}># general</h2>
           <div>{/* Search or other icons removed */}</div>
         </div>
         <MessageList messages={messages} />
