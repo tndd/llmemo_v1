@@ -2,11 +2,10 @@
 import IconSidebar from '@/components/IconSidebar';
 import HomeView from '@/components/home/HomeView';
 import LibraryView from '@/components/library/LibraryView';
+import SettingsView from '@/components/settings/SettingsView';
 import StatsView from '@/components/stats/StatsView';
 import { useState } from 'react';
-
-// Define view types
-type View = 'home' | 'library' | 'stats';
+import { View } from '@/types';
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<View>('home');
@@ -21,6 +20,7 @@ export default function Home() {
       {currentView === 'home' && <HomeView />}
       {currentView === 'library' && <LibraryView />}
       {currentView === 'stats' && <StatsView />}
+      {currentView === 'settings' && <SettingsView />}
     </div>
   );
 }

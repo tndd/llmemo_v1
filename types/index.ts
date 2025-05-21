@@ -5,3 +5,5 @@ export interface Message {
     time: string;
     text: string;
 }
+
+export type View = 'home' | 'library' | 'stats' | 'settings';
