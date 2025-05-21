@@ -8,15 +8,15 @@ interface MessageListProps {
   messages: Message[];
 }
 
-const containerClasses = clsx("flex-grow p-6 space-y-4 overflow-y-auto");
-const messageRowClasses = clsx("flex items-start space-x-3");
-const avatarClasses = clsx("rounded-full bg-gray-300 p-1");
-const userRowClasses = clsx("flex items-baseline space-x-2");
-const userNameClasses = clsx("font-semibold");
-const timeClasses = clsx("text-xs text-gray-500");
-const textClasses = clsx("text-gray-700");
-
 const MessageList: React.FC<MessageListProps> = ({ messages }) => {
+  const containerClasses = clsx("flex-grow p-6 space-y-4 overflow-y-auto");
+  const messageRowClasses = clsx("flex items-start space-x-3");
+  const avatarClasses = clsx("rounded-full bg-gray-300 p-1");
+  const userRowClasses = clsx("flex items-baseline space-x-2");
+  const userNameClasses = clsx("font-semibold");
+  const timeClasses = clsx("text-xs text-gray-500");
+  const textClasses = clsx("text-gray-700");
+
   return (
     <div className={containerClasses}>
       {messages.map((msg) => (

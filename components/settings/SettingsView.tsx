@@ -1,6 +1,6 @@
 // components/settings/SettingsView.tsx
-import clsx from "clsx";
 import React from 'react';
+import { containerClasses, titleClasses } from '../common/styles';
 
 const SettingsView: React.FC = () => {
   return (
@@ -13,6 +13,3 @@ const SettingsView: React.FC = () => {
 };
 
 export default SettingsView;
-
-const containerClasses = clsx("flex flex-col flex-grow h-full bg-white p-6");
-const titleClasses = clsx("text-xl font-semibold mb-4");

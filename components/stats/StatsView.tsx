@@ -1,6 +1,6 @@
 // components/views/StatsView.tsx
-import clsx from "clsx";
 import React from 'react';
+import { containerClasses, contentClasses, headerClasses, titleClasses } from '../common/styles';
 
 const StatsView: React.FC = () => {
   return (
@@ -16,8 +16,3 @@ const StatsView: React.FC = () => {
 };
 
 export default StatsView;
-
-const containerClasses = clsx("flex flex-col flex-grow h-full bg-white");
-const headerClasses = clsx("flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white");
-const titleClasses = clsx("text-xl font-semibold");
-const contentClasses = clsx("p-6");
