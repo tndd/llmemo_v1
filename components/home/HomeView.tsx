@@ -4,64 +4,35 @@ import MessageInput from "@/components/home/MessageInput";
 import MessageList from "@/components/home/MessageList";
 import { Message } from "@/types"; // Assuming types are in @/types
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useState } from "react"; // Removed useEffect
 
-const HomeView: React.FC = () => {
+interface HomeViewProps {
+  messages: Message[];
+  onSendMessage: (inputValue: string) => void;
+}
+
+const HomeView: React.FC<HomeViewProps> = ({ messages, onSendMessage }) => {
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      user: "Alice",
-      avatar: "/next.svg",
-      time: "10:00 AM",
-      text: "こんにちは！これはサンプルメッセージです。",
-    },
-    {
-      id: 2,
-      user: "Bob",
-      avatar: "/next.svg",
-      time: "10:02 AM",
-      text: "これは別のサンプルメッセージです。Slack風のUIですね！",
-    },
-  ]);
-  const [allTags, setAllTags] = useState<Set<string>>(new Set());
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  // selectedTag state and handleSelectTag function are removed.
+  // allTags derived state and its useEffect are removed.
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleSendMessage = () => {
+  // This function is now called by MessageInput
+  const handleTriggerSendMessage = () => {
     if (inputValue.trim() === "") return;
-
-    const tags = inputValue.match(/#\w+/g) || [];
-
-    const newMessage: Message = {
-      id: messages.length + 1,
-      user: "Your Name", // Replace with actual user name
-      avatar: "/next.svg", // Replace with actual user avatar
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      text: inputValue,
-      tags: tags,
-    };
-
-    setMessages([...messages, newMessage]);
-    setInputValue("");
-    if (tags.length > 0) {
-      setAllTags(prevTags => new Set([...prevTags, ...tags]));
-    }
+    onSendMessage(inputValue); // Call the prop function passed from page.tsx
+    setInputValue(""); // Clear the input field
   };
 
-  const handleSelectTag = (tag: string) => {
-    setSelectedTag(prevSelectedTag => prevSelectedTag === tag ? null : tag);
-  };
+  // handleSelectTag function is removed.
 
   return (
     <>
-      <MainSidebar allTags={allTags} selectedTag={selectedTag} onSelectTag={handleSelectTag} />
+      {/* MainSidebar no longer receives tag-related props */}
+      <MainSidebar />
       <div className={clsx("flex flex-col flex-grow h-full bg-white")}>
         {/* Header */}
         <div
@@ -72,11 +43,12 @@ const HomeView: React.FC = () => {
           <h2 className={clsx("text-xl font-semibold")}># general</h2>
           <div>{/* Search or other icons removed */}</div>
         </div>
-        <MessageList messages={messages} selectedTag={selectedTag} />
+        {/* MessageList now receives selectedTag={null} */}
+        <MessageList messages={messages} selectedTag={null} />
         <MessageInput
           inputValue={inputValue}
           onInputChange={handleInputChange}
-          onSendMessage={handleSendMessage}
+          onSendMessage={handleTriggerSendMessage} // Renamed handler
         />
       </div>
     </>
