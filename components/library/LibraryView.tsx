@@ -1,8 +1,12 @@
 // components/views/LibraryView.tsx
-import { containerClasses, contentClasses, headerClasses, titleClasses } from '@/styles';
-import React from 'react';
-import MainSidebarLayout from '../MainSidebarLayout';
-
+import {
+  containerClasses,
+  contentClasses,
+  headerClasses,
+  titleClasses,
+} from "@/styles";
+import React from "react";
+import MainSidebarLayout from "../MainSidebarLayout";
 
 const LibraryView: React.FC = () => {
   return (

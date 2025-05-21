@@ -1,8 +1,8 @@
 // components/MessageList.tsx
-import { Message } from '@/types'; // Assuming types are in @/types
+import { Message } from "@/types"; // Assuming types are in @/types
 import clsx from "clsx";
-import Image from 'next/image';
-import React from 'react';
+import Image from "next/image";
+import React from "react";
 
 interface MessageListProps {
   messages: Message[];
@@ -21,7 +21,13 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
     <div className={containerClasses}>
       {messages.map((msg) => (
         <div key={msg.id} className={messageRowClasses}>
-          <Image src={msg.avatar} alt={`${msg.user} Avatar`} width={40} height={40} className={avatarClasses} />
+          <Image
+            src={msg.avatar}
+            alt={`${msg.user} Avatar`}
+            width={40}
+            height={40}
+            className={avatarClasses}
+          />
           <div>
             <div className={userRowClasses}>
               <span className={userNameClasses}>{msg.user}</span>

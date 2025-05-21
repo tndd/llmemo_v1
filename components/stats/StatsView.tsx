@@ -1,6 +1,11 @@
 // components/views/StatsView.tsx
-import { containerClasses, contentClasses, headerClasses, titleClasses } from '@/styles';
-import React from 'react';
+import {
+  containerClasses,
+  contentClasses,
+  headerClasses,
+  titleClasses,
+} from "@/styles";
+import React from "react";
 
 const StatsView: React.FC = () => {
   return (
@@ -8,9 +13,7 @@ const StatsView: React.FC = () => {
       <div className={headerClasses}>
         <h2 className={titleClasses}>Stats View</h2>
       </div>
-      <div className={contentClasses}>
-        {/* 統計情報の内容 */}
-      </div>
+      <div className={contentClasses}>{/* 統計情報の内容 */}</div>
     </div>
   );
 };
