@@ -16,7 +16,10 @@ const MainSidebar: React.FC = () => {
     "focus:outline-none focus:border-blue-500",
   );
 
-  const linkClasses = clsx("block px-2 py-1 rounded", "hover:bg-gray-700");
+  const linkClasses = clsx(
+    "block px-2 py-1 rounded",
+    "hover:bg-gray-700",
+  );
 
   const dmLinkClasses = clsx(
     "flex items-center space-x-2 px-2 py-1 rounded",
@@ -26,10 +29,16 @@ const MainSidebar: React.FC = () => {
   return (
     <MainSidebarLayout>
       <div className={headerClasses}>
-        <span className="text-xl font-semibold">LLMemo</span>
+        <span className="text-xl font-semibold">
+          LLMemo
+        </span>
       </div>
       <div className="p-4">
-        <input type="text" placeholder="Search" className={inputClasses} />
+        <input
+          type="text"
+          placeholder="Search"
+          className={inputClasses}
+        />
       </div>
       <div className="flex-grow p-4 space-y-2 overflow-y-auto">
         {/* Channels */}
