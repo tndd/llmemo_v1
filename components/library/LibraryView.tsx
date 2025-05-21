@@ -4,7 +4,7 @@ import MainSidebarLayout from '../MainSidebarLayout';
 
 const LibraryView: React.FC = () => {
   return (
-    <div className="flex flex-row flex-grow h-full">
+    <>
       <MainSidebarLayout />
       {/* Existing LibraryView content */}
       <div className="flex flex-col flex-grow h-full bg-white">
@@ -16,7 +16,7 @@ const LibraryView: React.FC = () => {
           {/* Placeholder for Library content */}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
