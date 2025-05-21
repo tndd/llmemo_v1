@@ -6,7 +6,6 @@ import SettingsView from "@/components/settings/SettingsView";
 import StatsView from "@/components/stats/StatsView";
 import { useState } from "react";
 import { View, Message } from "@/types"; // Added Message
-import IconSidebar from "@/components/IconSidebar";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<View>("home");
