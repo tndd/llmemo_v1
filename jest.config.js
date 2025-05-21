@@ -1,14 +1,15 @@
-module.exports = {
-  testEnvironment: 'jsdom', // For testing React components that interact with the DOM
-  transform: {
-    '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest', // Use babel-jest for transformations
-  },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  // Optional: Setup files for global mocks or test setup
-  // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Example for a setup file
-  // Optional: Module name mapper for handling CSS, images, etc., if not handled by Babel/Webpack simulation
-  moduleNameMapper: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', // Mocks CSS imports
-    // Add more mappers if needed for other static assets
-  },
+const nextJest = require('next/jest')({
+  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
+  dir: './',
+});
+
+// Add any custom config to be passed to Jest
+const customJestConfig = {
+  // If you have a jest.setup.js, add it here:
+  // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Commented out as jest.setup.js does not exist
+  testEnvironment: 'jest-environment-jsdom',
+  // Add any other Jest specific configurations here
 };
+
+// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
+module.exports = nextJest(customJestConfig);
