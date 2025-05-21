@@ -24,6 +24,8 @@ const HomeView: React.FC = () => {
       text: "これは別のサンプルメッセージです。Slack風のUIですね！",
     },
   ]);
+  const [allTags, setAllTags] = useState<Set<string>>(new Set());
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -31,6 +33,8 @@ const HomeView: React.FC = () => {
 
   const handleSendMessage = () => {
     if (inputValue.trim() === "") return;
+
+    const tags = inputValue.match(/#\w+/g) || [];
 
     const newMessage: Message = {
       id: messages.length + 1,
@@ -41,15 +45,23 @@ const HomeView: React.FC = () => {
         minute: "2-digit",
       }),
       text: inputValue,
+      tags: tags,
     };
 
     setMessages([...messages, newMessage]);
     setInputValue("");
+    if (tags.length > 0) {
+      setAllTags(prevTags => new Set([...prevTags, ...tags]));
+    }
+  };
+
+  const handleSelectTag = (tag: string) => {
+    setSelectedTag(prevSelectedTag => prevSelectedTag === tag ? null : tag);
   };
 
   return (
     <>
-      <MainSidebar />
+      <MainSidebar allTags={allTags} selectedTag={selectedTag} onSelectTag={handleSelectTag} />
       <div className={clsx("flex flex-col flex-grow h-full bg-white")}>
         {/* Header */}
         <div
@@ -60,7 +72,7 @@ const HomeView: React.FC = () => {
           <h2 className={clsx("text-xl font-semibold")}># general</h2>
           <div>{/* Search or other icons removed */}</div>
         </div>
-        <MessageList messages={messages} />
+        <MessageList messages={messages} selectedTag={selectedTag} />
         <MessageInput
           inputValue={inputValue}
           onInputChange={handleInputChange}

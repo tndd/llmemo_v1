@@ -6,9 +6,10 @@ import React from "react";
 
 interface MessageListProps {
   messages: Message[];
+  selectedTag: string | null;
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages }) => {
+const MessageList: React.FC<MessageListProps> = ({ messages, selectedTag }) => {
   const containerClasses = clsx("flex-grow p-6 space-y-4 overflow-y-auto");
   const messageRowClasses = clsx("flex items-start space-x-3");
   const avatarClasses = clsx("rounded-full bg-gray-300 p-1");
@@ -17,9 +18,13 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
   const timeClasses = clsx("text-xs text-gray-500");
   const textClasses = clsx("text-gray-700");
 
+  const filteredMessages = selectedTag
+    ? messages.filter(msg => msg.tags && msg.tags.includes(selectedTag))
+    : messages;
+
   return (
     <div className={containerClasses}>
-      {messages.map((msg) => (
+      {filteredMessages.map((msg) => (
         <div key={msg.id} className={messageRowClasses}>
           <Image
             src={msg.avatar}

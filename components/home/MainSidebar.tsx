@@ -4,7 +4,13 @@ import React from "react";
 
 import MainSidebarLayout from "../MainSidebarLayout";
 
-const MainSidebar: React.FC = () => {
+interface MainSidebarProps {
+  allTags: Set<string>;
+  selectedTag: string | null;
+  onSelectTag: (tag: string) => void;
+}
+
+const MainSidebar: React.FC<MainSidebarProps> = ({ allTags, selectedTag, onSelectTag }) => {
   const headerClasses = clsx(
     "flex items-center justify-center h-16",
     "border-b border-gray-700",
@@ -75,6 +81,27 @@ const MainSidebar: React.FC = () => {
             </li>
           </ul>
         </div>
+        {/* Tags */}
+        {allTags.size > 0 && (
+          <div className="mt-4">
+            <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
+              Tags
+            </h3>
+            <ul className="space-y-1">
+              {Array.from(allTags).map(tag => (
+                <li key={tag}>
+                  <a
+                    href="#"
+                    className={clsx(linkClasses, { 'font-bold bg-gray-600': tag === selectedTag })}
+                    onClick={(e) => { e.preventDefault(); onSelectTag(tag); }}
+                  >
+                    {tag}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
       {/* User Info Section Removed */}
     </MainSidebarLayout>
