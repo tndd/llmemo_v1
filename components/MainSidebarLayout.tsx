@@ -6,7 +6,9 @@ interface MainSidebarLayoutProps {
   children?: React.ReactNode;
 }
 
-const MainSidebarLayout: React.FC<MainSidebarLayoutProps> = ({ children }) => {
+const MainSidebarLayout: React.FC<MainSidebarLayoutProps> = ({
+  children,
+}) => {
   const sidebarClasses = clsx(
     "flex flex-col w-[256px] flex-shrink-0",
     "bg-[rgb(75,60,75)] text-white",

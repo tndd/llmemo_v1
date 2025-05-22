@@ -23,21 +23,34 @@ const MessageList: React.FC<MessageListProps> = ({
   availableTags = [],
   currentUser = "currentUser",
 }) => {
-  const containerClasses = clsx("flex-grow p-6 space-y-4 overflow-y-auto");
-  const messageRowClasses = clsx("group flex items-start space-x-3 hover:bg-gray-50 p-2 rounded");
-  const avatarClasses = clsx("rounded-full bg-gray-300 p-1 flex-shrink-0");
+  const containerClasses = clsx(
+    "flex-grow p-6 space-y-4 overflow-y-auto",
+  );
+  const messageRowClasses = clsx(
+    "group flex items-start space-x-3 hover:bg-gray-50 p-2 rounded",
+  );
+  const avatarClasses = clsx(
+    "rounded-full bg-gray-300 p-1 flex-shrink-0",
+  );
   const userRowClasses = clsx("flex items-baseline space-x-2");
   const userNameClasses = clsx("font-semibold");
   const timeClasses = clsx("text-xs text-gray-500");
   const textClasses = clsx("text-gray-700");
   const messageContentClasses = clsx("flex-1");
-  const messageActionsClasses = clsx("flex items-center space-x-1 mt-1");
+  const messageActionsClasses = clsx(
+    "flex items-center space-x-1 mt-1",
+  );
 
   const filteredMessages = selectedTag
-    ? messages.filter((msg) => msg.tags && msg.tags.includes(selectedTag))
+    ? messages.filter(
+        (msg) => msg.tags && msg.tags.includes(selectedTag),
+      )
     : messages;
 
-  const handleAddReaction = (messageId: number, emoji: string) => {
+  const handleAddReaction = (
+    messageId: number,
+    emoji: string,
+  ) => {
     onReaction?.(messageId, emoji);
   };
 
@@ -58,19 +71,25 @@ const MessageList: React.FC<MessageListProps> = ({
               <span className={timeClasses}>{msg.time}</span>
             </div>
             <p className={textClasses}>{msg.text}</p>
-            
+
             {msg.reactions && msg.reactions.length > 0 && (
               <MessageReactions
                 reactions={msg.reactions}
-                onReactionClick={(emoji) => handleAddReaction(msg.id, emoji)}
+                onReactionClick={(emoji) =>
+                  handleAddReaction(msg.id, emoji)
+                }
                 currentUser={currentUser}
               />
             )}
-            
+
             <div className={messageActionsClasses}>
               <AddReaction
-                onAddReaction={(tagName) => handleAddReaction(msg.id, tagName)}
-                currentReactions={msg.reactions?.map(r => r.tagName) || []}
+                onAddReaction={(tagName) =>
+                  handleAddReaction(msg.id, tagName)
+                }
+                currentReactions={
+                  msg.reactions?.map((r) => r.tagName) || []
+                }
                 availableTags={availableTags || []}
                 onAddNewTag={onAddNewTag}
               />

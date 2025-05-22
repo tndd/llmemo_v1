@@ -11,8 +11,5 @@ export const headerClasses = clsx(
   "px-6",
   "border-b border-gray-200",
 );
-export const titleClasses = clsx(
-  "text-xl",
-  "font-semibold",
-);
+export const titleClasses = clsx("text-xl", "font-semibold");
 export const contentClasses = clsx("p-6");

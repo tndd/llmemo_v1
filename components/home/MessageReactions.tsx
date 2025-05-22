@@ -31,9 +31,13 @@ const MessageReactions: React.FC<MessageReactionsProps> = ({
             onClick={() => onReactionClick?.(reaction.tagName)}
             title={reaction.users.join(", ")}
           >
-            <span className="font-medium">{reaction.tagName}</span>
+            <span className="font-medium">
+              {reaction.tagName}
+            </span>
             {reaction.count > 1 && (
-              <span className="ml-1 text-gray-500">{reaction.count}</span>
+              <span className="ml-1 text-gray-500">
+                {reaction.count}
+              </span>
             )}
           </button>
         );

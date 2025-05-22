@@ -7,7 +7,9 @@ import MainSidebarLayout from "../MainSidebarLayout";
 // MainSidebarProps is now empty or can be removed if no props are needed
 interface MainSidebarProps {}
 
-const MainSidebar: React.FC<MainSidebarProps> = (/* props can be removed if MainSidebarProps is empty */) => {
+const MainSidebar: React.FC<
+  MainSidebarProps
+> = (/* props can be removed if MainSidebarProps is empty */) => {
   const headerClasses = clsx(
     "flex items-center justify-center h-16",
     "border-b border-gray-700",
@@ -32,9 +34,7 @@ const MainSidebar: React.FC<MainSidebarProps> = (/* props can be removed if Main
   return (
     <MainSidebarLayout>
       <div className={headerClasses}>
-        <span className="text-xl font-semibold">
-          LLMemo
-        </span>
+        <span className="text-xl font-semibold">LLMemo</span>
       </div>
       <div className="p-4">
         <input

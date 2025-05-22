@@ -1,5 +1,5 @@
 export interface Reaction {
-  tagName: string;  // Changed from emoji to tagName
+  tagName: string; // Changed from emoji to tagName
   count: number;
   users: string[];
 }

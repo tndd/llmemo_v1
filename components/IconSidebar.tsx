@@ -7,7 +7,9 @@ interface IconSidebarProps {
   onViewChange: (view: View) => void;
 }
 
-const IconSidebar: React.FC<IconSidebarProps> = ({ onViewChange }) => {
+const IconSidebar: React.FC<IconSidebarProps> = ({
+  onViewChange,
+}) => {
   const sidebarClasses = clsx(
     "flex flex-col items-center w-16 py-4 space-y-3 flex-shrink-0",
     "bg-gray-800 text-white",
@@ -20,23 +22,36 @@ const IconSidebar: React.FC<IconSidebarProps> = ({ onViewChange }) => {
 
   return (
     <div className={sidebarClasses}>
-      <div onClick={() => onViewChange("home")} className={iconClasses}>
+      <div
+        onClick={() => onViewChange("home")}
+        className={iconClasses}
+      >
         H
       </div>{" "}
       {/* Home */}
-      <div onClick={() => onViewChange("library")} className={iconClasses}>
+      <div
+        onClick={() => onViewChange("library")}
+        className={iconClasses}
+      >
         L
       </div>{" "}
       {/* Library */}
-      <div onClick={() => onViewChange("stats")} className={iconClasses}>
+      <div
+        onClick={() => onViewChange("stats")}
+        className={iconClasses}
+      >
         S
       </div>{" "}
       {/* Stats */}
-      <div onClick={() => onViewChange("settings")} className={iconClasses}>
+      <div
+        onClick={() => onViewChange("settings")}
+        className={iconClasses}
+      >
         Set
       </div>{" "}
       {/* Settings */}
-      <div className={clsx(iconClasses, "mt-auto")}>+</div> {/* Add */}
+      <div className={clsx(iconClasses, "mt-auto")}>+</div>{" "}
+      {/* Add */}
     </div>
   );
 };

@@ -33,7 +33,10 @@ export default function Home() {
     setCurrentView(view);
   };
 
-  const handleSendMessage = (inputValue: string, messageTags: string[] = []) => {
+  const handleSendMessage = (
+    inputValue: string,
+    messageTags: string[] = [],
+  ) => {
     if (inputValue.trim() === "") return;
 
     // Extract any remaining tags from the message text
@@ -41,7 +44,10 @@ export default function Home() {
     const allTags = [...new Set([...messageTags, ...textTags])];
 
     const newMessage: Message = {
-      id: messages.length > 0 ? Math.max(...messages.map(m => m.id)) + 1 : 1,
+      id:
+        messages.length > 0
+          ? Math.max(...messages.map((m) => m.id)) + 1
+          : 1,
       user: "Your Name",
       avatar: "/next.svg",
       time: new Date().toLocaleTimeString([], {
@@ -53,41 +59,46 @@ export default function Home() {
       reactions: [],
     };
 
-    setMessages(prevMessages => [...prevMessages, newMessage]);
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
     if (allTags.length > 0) {
-      setAllTags(prevTags => new Set([...prevTags, ...allTags]));
+      setAllTags(
+        (prevTags) => new Set([...prevTags, ...allTags]),
+      );
     }
   };
 
   const handleReaction = (messageId: number, tagName: string) => {
-    setMessages(prevMessages => {
-      return prevMessages.map(msg => {
+    setMessages((prevMessages) => {
+      return prevMessages.map((msg) => {
         if (msg.id !== messageId) return msg;
-        
-        const currentUser = 'currentUser';
+
+        const currentUser = "currentUser";
         const reactions = msg.reactions || [];
-        const reactionIndex = reactions.findIndex(r => r.tagName === tagName);
-        
+        const reactionIndex = reactions.findIndex(
+          (r) => r.tagName === tagName,
+        );
+
         // If reaction exists
         if (reactionIndex >= 0) {
           const existingReaction = reactions[reactionIndex];
-          const userIndex = existingReaction.users.indexOf(currentUser);
-          
+          const userIndex =
+            existingReaction.users.indexOf(currentUser);
+
           // If user already reacted, remove their reaction
           if (userIndex >= 0) {
             const updatedUsers = [...existingReaction.users];
             updatedUsers.splice(userIndex, 1);
-            
+
             // If no more users, remove the reaction
             if (updatedUsers.length === 0) {
               const updatedReactions = [...reactions];
               updatedReactions.splice(reactionIndex, 1);
               return {
                 ...msg,
-                reactions: updatedReactions
+                reactions: updatedReactions,
               };
             }
-            
+
             // Otherwise, update the count
             return {
               ...msg,
@@ -96,12 +107,12 @@ export default function Home() {
                   ? {
                       ...r,
                       count: r.count - 1,
-                      users: updatedUsers
+                      users: updatedUsers,
                     }
-                  : r
-              )
+                  : r,
+              ),
             };
-          } 
+          }
           // If user hasn't reacted, add their reaction
           else {
             return {
@@ -111,13 +122,13 @@ export default function Home() {
                   ? {
                       ...r,
                       count: r.count + 1,
-                      users: [...r.users, currentUser]
+                      users: [...r.users, currentUser],
                     }
-                  : r
-              )
+                  : r,
+              ),
             };
           }
-        } 
+        }
         // If this is a new reaction
         else {
           return {
@@ -127,17 +138,17 @@ export default function Home() {
               {
                 tagName,
                 count: 1,
-                users: [currentUser]
-              }
-            ]
+                users: [currentUser],
+              },
+            ],
           };
         }
       });
     });
   };
-  
+
   const handleAddNewTag = (tagName: string) => {
-    setAllTags(prevTags => {
+    setAllTags((prevTags) => {
       const newTags = new Set(prevTags);
       newTags.add(tagName);
       return newTags;
@@ -148,8 +159,8 @@ export default function Home() {
     <div className="flex h-screen antialiased text-gray-800">
       <IconSidebar onViewChange={handleViewChange} />
       {currentView === "home" && (
-        <HomeView 
-          messages={messages} 
+        <HomeView
+          messages={messages}
           onSendMessage={handleSendMessage}
           onReaction={handleReaction}
           onAddNewTag={handleAddNewTag}
@@ -157,7 +168,9 @@ export default function Home() {
           currentUser="currentUser"
         />
       )}
-      {currentView === "library" && <LibraryView messages={messages} allTags={allTags} />}
+      {currentView === "library" && (
+        <LibraryView messages={messages} allTags={allTags} />
+      )}
       {currentView === "stats" && <StatsView />}
       {currentView === "settings" && <SettingsView />}
     </div>

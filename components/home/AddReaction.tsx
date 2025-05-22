@@ -32,7 +32,10 @@ const AddReaction: React.FC<AddReactionProps> = ({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside,
+      );
     };
   }, []);
 
@@ -52,7 +55,7 @@ const AddReaction: React.FC<AddReactionProps> = ({
   };
 
   const availableTagsToShow = availableTags.filter(
-    (tag) => !currentReactions.includes(tag)
+    (tag) => !currentReactions.includes(tag),
   );
 
   return (
@@ -71,14 +74,18 @@ const AddReaction: React.FC<AddReactionProps> = ({
         }}
         aria-label="タグを追加"
       >
-        <span className="text-xs font-medium text-gray-500">+</span>
+        <span className="text-xs font-medium text-gray-500">
+          +
+        </span>
       </button>
 
       {isOpen && (
         <div className="absolute bottom-full left-0 mb-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-10 p-2">
           {/* 利用可能なタグを表示 */}
           <div className="mb-2">
-            <div className="text-xs text-gray-500 mb-1">タグを選択:</div>
+            <div className="text-xs text-gray-500 mb-1">
+              タグを選択:
+            </div>
             <div className="flex flex-wrap gap-1">
               {availableTagsToShow.map((tag) => (
                 <button
@@ -96,9 +103,9 @@ const AddReaction: React.FC<AddReactionProps> = ({
               ))}
             </div>
           </div>
-          
+
           <div className="border-t border-gray-100 my-2"></div>
-          
+
           {/* 新しいタグを追加 */}
           <form onSubmit={handleAddNewTag}>
             <div className="flex items-center">
