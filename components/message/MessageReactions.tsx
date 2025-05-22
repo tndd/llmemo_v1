@@ -6,7 +6,7 @@ import { Reaction } from "@/types";
 interface MessageReactionsProps {
   reactions: Reaction[];
   onReactionClick?: (tagName: string) => void;
-  currentUser?: string; // To track if current user has reacted
+  currentUser?: string;
 }
 
 const MessageReactions: React.FC<MessageReactionsProps> = ({

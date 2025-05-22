@@ -169,7 +169,13 @@ export default function Home() {
         />
       )}
       {currentView === "library" && (
-        <LibraryView messages={messages} allTags={allTags} />
+        <LibraryView 
+          messages={messages} 
+          allTags={allTags}
+          onReaction={handleReaction}
+          onAddNewTag={handleAddNewTag}
+          currentUser="currentUser"
+        />
       )}
       {currentView === "stats" && <StatsView />}
       {currentView === "settings" && <SettingsView />}

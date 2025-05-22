@@ -1,4 +1,3 @@
-// components/MessageList.tsx
 import { Message } from "@/types";
 import clsx from "clsx";
 import Image from "next/image";
@@ -13,6 +12,7 @@ interface MessageListProps {
   onAddNewTag?: (tagName: string) => void;
   availableTags?: string[];
   currentUser?: string;
+  showActions?: boolean;
 }
 
 const MessageList: React.FC<MessageListProps> = ({
@@ -22,6 +22,7 @@ const MessageList: React.FC<MessageListProps> = ({
   onAddNewTag,
   availableTags = [],
   currentUser = "currentUser",
+  showActions = true,
 }) => {
   const containerClasses = clsx(
     "flex-grow p-6 space-y-4 overflow-y-auto",
@@ -49,9 +50,9 @@ const MessageList: React.FC<MessageListProps> = ({
 
   const handleAddReaction = (
     messageId: number,
-    emoji: string,
-  ) => {
-    onReaction?.(messageId, emoji);
+    tagName: string
+  ): void => {
+    onReaction?.(messageId, tagName);
   };
 
   return (
@@ -74,26 +75,28 @@ const MessageList: React.FC<MessageListProps> = ({
 
             {msg.reactions && msg.reactions.length > 0 && (
               <MessageReactions
-                reactions={msg.reactions}
-                onReactionClick={(emoji) =>
-                  handleAddReaction(msg.id, emoji)
+                reactions={msg.reactions || []}
+                onReactionClick={(tagName: string) =>
+                  handleAddReaction(msg.id, tagName)
                 }
                 currentUser={currentUser}
               />
             )}
 
-            <div className={messageActionsClasses}>
-              <AddReaction
-                onAddReaction={(tagName) =>
-                  handleAddReaction(msg.id, tagName)
-                }
-                currentReactions={
-                  msg.reactions?.map((r) => r.tagName) || []
-                }
-                availableTags={availableTags || []}
-                onAddNewTag={onAddNewTag}
-              />
-            </div>
+            {showActions && (
+              <div className={messageActionsClasses}>
+                <AddReaction
+                  onAddReaction={(tagName: string) =>
+                    handleAddReaction(msg.id, tagName)
+                  }
+                  currentReactions={
+                    msg.reactions?.map((r) => r.tagName) || []
+                  }
+                  availableTags={availableTags}
+                  onAddNewTag={onAddNewTag}
+                />
+              </div>
+            )}
           </div>
         </div>
       ))}

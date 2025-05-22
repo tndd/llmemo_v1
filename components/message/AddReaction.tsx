@@ -104,27 +104,29 @@ const AddReaction: React.FC<AddReactionProps> = ({
             </div>
           </div>
 
-          <div className="border-t border-gray-100 my-2"></div>
-
           {/* 新しいタグを追加 */}
-          <form onSubmit={handleAddNewTag}>
-            <div className="flex items-center">
-              <input
-                ref={inputRef}
-                type="text"
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                placeholder="新しいタグを追加"
-                className="flex-1 text-sm border border-gray-300 rounded-l px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded-r whitespace-nowrap"
-              >
-                追加
-              </button>
-            </div>
-          </form>
+          {onAddNewTag && (
+            <form onSubmit={handleAddNewTag}>
+              <div className="flex items-center">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex-1 text-xs border rounded px-2 py-1 mr-1"
+                  placeholder="新しいタグを入力"
+                />
+                <button
+                  type="submit"
+                  className="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                  disabled={!newTag.trim()}
+                >
+                  追加
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       )}
     </div>

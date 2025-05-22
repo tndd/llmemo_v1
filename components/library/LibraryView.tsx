@@ -3,18 +3,24 @@
 
 import { Message } from "@/types";
 import React, { useState } from "react";
-import LibrarySidebar from "./LibrarySidebar"; // Path is correct
-import MessageList from "../home/MessageList"; // Path is correct
+import LibrarySidebar from "./LibrarySidebar";
+import { MessageList } from "@/components/message";
 import clsx from "clsx";
 
 interface LibraryViewProps {
   messages: Message[];
   allTags: Set<string>;
+  onReaction?: (messageId: number, tagName: string) => void;
+  onAddNewTag?: (tagName: string) => void;
+  currentUser?: string;
 }
 
 const LibraryView: React.FC<LibraryViewProps> = ({
   messages,
   allTags,
+  onReaction,
+  onAddNewTag,
+  currentUser = "currentUser",
 }) => {
   const [selectedTag, setSelectedTag] = useState<string | null>(
     null,
@@ -66,6 +72,11 @@ const LibraryView: React.FC<LibraryViewProps> = ({
         <MessageList
           messages={filteredMessages}
           selectedTag={null}
+          onReaction={onReaction}
+          onAddNewTag={onAddNewTag}
+          availableTags={Array.from(allTags)}
+          currentUser={currentUser}
+          showActions={true}
         />
       </div>
     </div>

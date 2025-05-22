@@ -1,10 +1,9 @@
 "use client";
 import HomeSidebar from "@/components/home/HomeSidebar";
-import MessageInput from "@/components/home/MessageInput";
-import MessageList from "@/components/home/MessageList";
+import { MessageList, MessageInput } from "@/components/message";
 import { Message, Reaction } from "@/types";
 import clsx from "clsx";
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from 'react';
 
 interface HomeViewProps {
   messages: Message[];
@@ -24,8 +23,7 @@ const HomeView: React.FC<HomeViewProps> = ({
   currentUser = "currentUser",
 }) => {
   const [inputValue, setInputValue] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
+  // タグの選択状態は新しいMessageInputコンポーネント内で管理されるようになったため削除
   // Extract all unique tags from messages for the tag selector
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -43,30 +41,16 @@ const HomeView: React.FC<HomeViewProps> = ({
     setInputValue(e.target.value);
   };
 
-  const handleAddTag = (tag: string) => {
-    if (!selectedTags.includes(tag)) {
-      setSelectedTags([...selectedTags, tag]);
-    }
-  };
-
-  const handleRemoveTag = (tagToRemove: string) => {
-    setSelectedTags(
-      selectedTags.filter((tag) => tag !== tagToRemove),
-    );
-  };
+  // タグの選択状態は新しいMessageInputコンポーネント内で管理されるようになったため削除
 
   const handleTriggerSendMessage = () => {
     if (inputValue.trim() === "") return;
 
-    // Combine manual tags (from #hashtags in the message) with selected tags
-    const manualTags = inputValue.match(/#\w+/g) || [];
-    const allMessageTags = [
-      ...new Set([...manualTags, ...selectedTags]),
-    ];
-
-    onSendMessage(inputValue, allMessageTags);
+    // Extract tags from the message text (e.g., #tag)
+    const tags = inputValue.match(/#\w+/g) || [];
+    
+    onSendMessage(inputValue, [...new Set(tags)]);
     setInputValue("");
-    setSelectedTags([]);
   };
 
   const handleReaction = useCallback(
@@ -106,8 +90,6 @@ const HomeView: React.FC<HomeViewProps> = ({
             inputValue={inputValue}
             onInputChange={handleInputChange}
             onSendMessage={handleTriggerSendMessage}
-            onAddTag={handleAddTag}
-            availableTags={allTags}
           />
         </div>
       </div>
