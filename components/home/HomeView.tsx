@@ -102,57 +102,6 @@ const HomeView: React.FC<HomeViewProps> = ({
           currentUser={currentUser}
         />
         <div className="border-t border-gray-200">
-          <div className="flex flex-wrap gap-2 p-2 bg-gray-50 border-b border-gray-200">
-            {/* Available tags */}
-            <div className="text-xs text-gray-500 w-full mb-1">
-              タグを選択:
-            </div>
-            {availableTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleAddTag(tag);
-                }}
-                className={`text-xs px-2 py-1 rounded ${
-                  selectedTags.includes(tag)
-                    ? "bg-blue-100 text-blue-800"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
-
-            {/* Selected tags */}
-            {selectedTags.length > 0 && (
-              <>
-                <div className="w-full border-t my-2"></div>
-                <div className="text-xs text-gray-500 w-full mb-1">
-                  選択中のタグ:
-                </div>
-                {selectedTags.map((tag) => (
-                  <div
-                    key={tag}
-                    className="flex items-center bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
-                  >
-                    {tag}
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleRemoveTag(tag);
-                      }}
-                      className="ml-1 text-blue-500 hover:text-blue-700"
-                      aria-label={`Remove ${tag}`}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-
           <MessageInput
             inputValue={inputValue}
             onInputChange={handleInputChange}
