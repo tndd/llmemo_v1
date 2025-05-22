@@ -1,12 +1,12 @@
-// components/MainSidebarLayout.tsx
+// components/SidebarLayout.tsx
 import clsx from "clsx";
 import React from "react";
 
-interface MainSidebarLayoutProps {
+interface SidebarLayoutProps {
   children?: React.ReactNode;
 }
 
-const MainSidebarLayout: React.FC<MainSidebarLayoutProps> = ({
+const SidebarLayout: React.FC<SidebarLayoutProps> = ({
   children,
 }) => {
   const sidebarClasses = clsx(
@@ -17,4 +17,4 @@ const MainSidebarLayout: React.FC<MainSidebarLayoutProps> = ({
   return <div className={sidebarClasses}>{children}</div>;
 };
 
-export default MainSidebarLayout;
+export default SidebarLayout;

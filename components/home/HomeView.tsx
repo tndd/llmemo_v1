@@ -1,5 +1,5 @@
 "use client";
-import MainSidebar from "@/components/home/MainSidebar";
+import Sidebar from "@/components/home/Sidebar";
 import MessageInput from "@/components/home/MessageInput";
 import MessageList from "@/components/home/MessageList";
 import { Message, Reaction } from "@/types";
@@ -78,7 +78,7 @@ const HomeView: React.FC<HomeViewProps> = ({
 
   return (
     <>
-      <MainSidebar />
+      <Sidebar />
       <div
         className={clsx(
           "flex flex-col flex-grow h-full bg-white",

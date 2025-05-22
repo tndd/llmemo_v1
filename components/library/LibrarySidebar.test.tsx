@@ -3,8 +3,8 @@ import React from "react";
 // To test React components, we'd typically use @testing-library/react
 // For now, let's outline the tests conceptually as if we could render and inspect.
 
-// Mock MainSidebarLayout to prevent issues with its internal rendering logic in this unit test
-jest.mock("../MainSidebarLayout", () => {
+// Mock SidebarLayout to prevent issues with its internal rendering logic in this unit test
+jest.mock("../SidebarLayout", () => {
   // A simple functional component that renders its children
   return jest.fn(({ children }) => <div>{children}</div>);
 });
@@ -55,6 +55,7 @@ describe("LibrarySidebar Component", () => {
       ...defaultProps,
       selectedTag: "#typescript",
     };
+    // @ts-expect-error - We're testing the component with a string value for selectedTag
     renderComponent(propsWithSelectedTag);
     // Expected: The anchor tag for '#typescript' should have a specific class indicating selection.
     // e.g., 'font-bold bg-gray-600 text-white'

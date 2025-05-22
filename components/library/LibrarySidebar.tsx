@@ -3,7 +3,7 @@
 
 import clsx from "clsx";
 import React from "react";
-import MainSidebarLayout from "../MainSidebarLayout"; // Path is correct
+import SidebarLayout from "../SidebarLayout";
 
 interface LibrarySidebarProps {
   allTags: Set<string>;
@@ -30,7 +30,7 @@ const LibrarySidebar: React.FC<LibrarySidebarProps> = ({
   const allMessagesSelected = selectedTag === null;
 
   return (
-    <MainSidebarLayout>
+    <SidebarLayout>
       <div className={headerClasses}>
         <span className="text-xl font-semibold text-white">
           Library
@@ -85,7 +85,7 @@ const LibrarySidebar: React.FC<LibrarySidebarProps> = ({
             ))
         )}
       </div>
-    </MainSidebarLayout>
+    </SidebarLayout>
   );
 };
 
