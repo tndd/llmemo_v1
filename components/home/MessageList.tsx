@@ -9,7 +9,9 @@ import AddReaction from "./AddReaction";
 interface MessageListProps {
   messages: Message[];
   selectedTag: string | null;
-  onReaction?: (messageId: number, emoji: string) => void;
+  onReaction?: (messageId: number, tagName: string) => void;
+  onAddNewTag?: (tagName: string) => void;
+  availableTags?: string[];
   currentUser?: string;
 }
 
@@ -17,6 +19,8 @@ const MessageList: React.FC<MessageListProps> = ({
   messages,
   selectedTag,
   onReaction,
+  onAddNewTag,
+  availableTags = [],
   currentUser = "currentUser",
 }) => {
   const containerClasses = clsx("flex-grow p-6 space-y-4 overflow-y-auto");
@@ -65,8 +69,10 @@ const MessageList: React.FC<MessageListProps> = ({
             
             <div className={messageActionsClasses}>
               <AddReaction
-                onAddReaction={(emoji) => handleAddReaction(msg.id, emoji)}
-                currentReactions={msg.reactions?.map(r => r.emoji) || []}
+                onAddReaction={(tagName) => handleAddReaction(msg.id, tagName)}
+                currentReactions={msg.reactions?.map(r => r.tagName) || []}
+                availableTags={availableTags || []}
+                onAddNewTag={onAddNewTag}
               />
             </div>
           </div>

@@ -3,18 +3,22 @@
 import React, { useState, useRef, useEffect } from "react";
 
 interface AddReactionProps {
-  onAddReaction: (emoji: string) => void;
+  onAddReaction: (tagName: string) => void;
   currentReactions?: string[];
+  availableTags: string[];
+  onAddNewTag?: (tagName: string) => void;
 }
-
-const EMOJIS = ["👍", "👎", "❤️", "😂", "😮", "😢", "🎉", "🙏", "👀", "🤔"];
 
 const AddReaction: React.FC<AddReactionProps> = ({
   onAddReaction,
   currentReactions = [],
+  availableTags = [],
+  onAddNewTag,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [newTag, setNewTag] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -32,13 +36,23 @@ const AddReaction: React.FC<AddReactionProps> = ({
     };
   }, []);
 
-  const handleEmojiClick = (emoji: string) => {
-    onAddReaction(emoji);
+  const handleTagClick = (tagName: string) => {
+    onAddReaction(tagName);
     setIsOpen(false);
   };
 
-  const availableEmojis = EMOJIS.filter(
-    (emoji) => !currentReactions.includes(emoji)
+  const handleAddNewTag = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newTag.trim() && onAddNewTag) {
+      onAddNewTag(newTag.trim());
+      onAddReaction(newTag.trim());
+      setNewTag("");
+      setIsOpen(false);
+    }
+  };
+
+  const availableTagsToShow = availableTags.filter(
+    (tag) => !currentReactions.includes(tag)
   );
 
   return (
@@ -49,42 +63,61 @@ const AddReaction: React.FC<AddReactionProps> = ({
           e.preventDefault();
           e.stopPropagation();
           setIsOpen(!isOpen);
+          if (!isOpen) {
+            setTimeout(() => {
+              inputRef.current?.focus();
+            }, 0);
+          }
         }}
-        aria-label="Add reaction"
+        aria-label="タグを追加"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
+        <span className="text-xs font-medium text-gray-500">+</span>
       </button>
 
       {isOpen && (
-        <div className="absolute bottom-full left-0 mb-1 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-10">
-          <div className="grid grid-cols-5 gap-1">
-            {availableEmojis.map((emoji) => (
-              <button
-                key={emoji}
-                className="text-xl p-1 hover:bg-gray-100 rounded"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleEmojiClick(emoji);
-                }}
-              >
-                {emoji}
-              </button>
-            ))}
+        <div className="absolute bottom-full left-0 mb-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-10 p-2">
+          {/* 利用可能なタグを表示 */}
+          <div className="mb-2">
+            <div className="text-xs text-gray-500 mb-1">タグを選択:</div>
+            <div className="flex flex-wrap gap-1">
+              {availableTagsToShow.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleTagClick(tag);
+                  }}
+                  className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
           </div>
+          
+          <div className="border-t border-gray-100 my-2"></div>
+          
+          {/* 新しいタグを追加 */}
+          <form onSubmit={handleAddNewTag}>
+            <div className="flex items-center">
+              <input
+                ref={inputRef}
+                type="text"
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                placeholder="新しいタグを追加"
+                className="flex-1 text-sm border border-gray-300 rounded-l px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded-r whitespace-nowrap"
+              >
+                追加
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </div>

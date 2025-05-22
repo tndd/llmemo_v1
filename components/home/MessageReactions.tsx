@@ -5,7 +5,7 @@ import { Reaction } from "@/types";
 
 interface MessageReactionsProps {
   reactions: Reaction[];
-  onReactionClick?: (emoji: string) => void;
+  onReactionClick?: (tagName: string) => void;
   currentUser?: string; // To track if current user has reacted
 }
 
@@ -22,17 +22,19 @@ const MessageReactions: React.FC<MessageReactionsProps> = ({
         const hasReacted = reaction.users.includes(currentUser);
         return (
           <button
-            key={`${reaction.emoji}-${index}`}
-            className={`flex items-center px-2 py-0.5 rounded-full text-sm ${
+            key={`${reaction.tagName}-${index}`}
+            className={`flex items-center px-2 py-0.5 rounded-full text-xs ${
               hasReacted
                 ? "bg-blue-100 text-blue-800 border border-blue-200"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
-            onClick={() => onReactionClick?.(reaction.emoji)}
+            onClick={() => onReactionClick?.(reaction.tagName)}
             title={reaction.users.join(", ")}
           >
-            <span className="mr-1">{reaction.emoji}</span>
-            <span>{reaction.count}</span>
+            <span className="font-medium">{reaction.tagName}</span>
+            {reaction.count > 1 && (
+              <span className="ml-1 text-gray-500">{reaction.count}</span>
+            )}
           </button>
         );
       })}

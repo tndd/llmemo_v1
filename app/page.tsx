@@ -59,14 +59,14 @@ export default function Home() {
     }
   };
 
-  const handleReaction = (messageId: number, emoji: string) => {
+  const handleReaction = (messageId: number, tagName: string) => {
     setMessages(prevMessages =>
       prevMessages.map(msg => {
         if (msg.id !== messageId) return msg;
 
         const currentUser = "currentUser"; // Replace with actual user ID
         const existingReactionIndex = msg.reactions?.findIndex(
-          r => r.emoji === emoji
+          r => r.tagName === tagName
         ) ?? -1;
 
         // If reaction exists
@@ -125,7 +125,7 @@ export default function Home() {
           reactions: [
             ...(msg.reactions || []),
             {
-              emoji,
+              tagName,
               count: 1,
               users: [currentUser],
             },
@@ -133,6 +133,11 @@ export default function Home() {
         };
       })
     );
+  };
+  
+  const handleAddNewTag = (tagName: string) => {
+    // Add the new tag to the list of all tags
+    setAllTags(prevTags => new Set([...prevTags, tagName]));
   };
 
   return (
@@ -143,6 +148,8 @@ export default function Home() {
           messages={messages} 
           onSendMessage={handleSendMessage}
           onReaction={handleReaction}
+          onAddNewTag={handleAddNewTag}
+          availableTags={Array.from(allTags)}
           currentUser="currentUser"
         />
       )}
