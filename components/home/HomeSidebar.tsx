@@ -1,13 +1,15 @@
-// components/MainSidebar.tsx
+// components/home/HomeSidebar.tsx
 import clsx from "clsx";
 import React from "react";
 
-import MainSidebarLayout from "../MainSidebarLayout";
+import SidebarLayout from "../SidebarLayout";
 
-// MainSidebarProps is now empty or can be removed if no props are needed
-interface MainSidebarProps {}
+// SidebarProps is now empty or can be removed if no props are needed
+interface HomeSidebarProps {}
 
-const MainSidebar: React.FC<MainSidebarProps> = (/* props can be removed if MainSidebarProps is empty */) => {
+const HomeSidebar: React.FC<
+  HomeSidebarProps
+> = (/* props can be removed if HomeSidebarProps is empty */) => {
   const headerClasses = clsx(
     "flex items-center justify-center h-16",
     "border-b border-gray-700",
@@ -30,11 +32,9 @@ const MainSidebar: React.FC<MainSidebarProps> = (/* props can be removed if Main
   );
 
   return (
-    <MainSidebarLayout>
+    <SidebarLayout>
       <div className={headerClasses}>
-        <span className="text-xl font-semibold">
-          LLMemo
-        </span>
+        <span className="text-xl font-semibold">LLMemo</span>
       </div>
       <div className="p-4">
         <input
@@ -90,8 +90,8 @@ const MainSidebar: React.FC<MainSidebarProps> = (/* props can be removed if Main
         {/* Tags section removed */}
       </div>
       {/* User Info Section Removed */}
-    </MainSidebarLayout>
+    </SidebarLayout>
   );
 };
 
-export default MainSidebar;
+export default HomeSidebar;
