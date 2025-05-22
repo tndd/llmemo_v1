@@ -1,3 +1,9 @@
+export interface Reaction {
+  emoji: string;
+  count: number;
+  users: string[];
+}
+
 export interface Message {
   id: number;
   user: string;
@@ -5,6 +11,7 @@ export interface Message {
   time: string;
   text: string;
   tags?: string[];
+  reactions?: Reaction[];
 }
 
 export type View = "home" | "library" | "stats" | "settings";

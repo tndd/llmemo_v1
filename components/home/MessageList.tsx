@@ -1,26 +1,41 @@
 // components/MessageList.tsx
-import { Message } from "@/types"; // Assuming types are in @/types
+import { Message } from "@/types";
 import clsx from "clsx";
 import Image from "next/image";
 import React from "react";
+import MessageReactions from "./MessageReactions";
+import AddReaction from "./AddReaction";
 
 interface MessageListProps {
   messages: Message[];
   selectedTag: string | null;
+  onReaction?: (messageId: number, emoji: string) => void;
+  currentUser?: string;
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages, selectedTag }) => {
+const MessageList: React.FC<MessageListProps> = ({
+  messages,
+  selectedTag,
+  onReaction,
+  currentUser = "currentUser",
+}) => {
   const containerClasses = clsx("flex-grow p-6 space-y-4 overflow-y-auto");
-  const messageRowClasses = clsx("flex items-start space-x-3");
-  const avatarClasses = clsx("rounded-full bg-gray-300 p-1");
+  const messageRowClasses = clsx("group flex items-start space-x-3 hover:bg-gray-50 p-2 rounded");
+  const avatarClasses = clsx("rounded-full bg-gray-300 p-1 flex-shrink-0");
   const userRowClasses = clsx("flex items-baseline space-x-2");
   const userNameClasses = clsx("font-semibold");
   const timeClasses = clsx("text-xs text-gray-500");
   const textClasses = clsx("text-gray-700");
+  const messageContentClasses = clsx("flex-1");
+  const messageActionsClasses = clsx("flex items-center space-x-1 mt-1");
 
   const filteredMessages = selectedTag
-    ? messages.filter(msg => msg.tags && msg.tags.includes(selectedTag))
+    ? messages.filter((msg) => msg.tags && msg.tags.includes(selectedTag))
     : messages;
+
+  const handleAddReaction = (messageId: number, emoji: string) => {
+    onReaction?.(messageId, emoji);
+  };
 
   return (
     <div className={containerClasses}>
@@ -33,12 +48,27 @@ const MessageList: React.FC<MessageListProps> = ({ messages, selectedTag }) => {
             height={40}
             className={avatarClasses}
           />
-          <div>
+          <div className={messageContentClasses}>
             <div className={userRowClasses}>
               <span className={userNameClasses}>{msg.user}</span>
               <span className={timeClasses}>{msg.time}</span>
             </div>
             <p className={textClasses}>{msg.text}</p>
+            
+            {msg.reactions && msg.reactions.length > 0 && (
+              <MessageReactions
+                reactions={msg.reactions}
+                onReactionClick={(emoji) => handleAddReaction(msg.id, emoji)}
+                currentUser={currentUser}
+              />
+            )}
+            
+            <div className={messageActionsClasses}>
+              <AddReaction
+                onAddReaction={(emoji) => handleAddReaction(msg.id, emoji)}
+                currentReactions={msg.reactions?.map(r => r.emoji) || []}
+              />
+            </div>
           </div>
         </div>
       ))}
