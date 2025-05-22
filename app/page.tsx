@@ -60,18 +60,17 @@ export default function Home() {
   };
 
   const handleReaction = (messageId: number, tagName: string) => {
-    setMessages(prevMessages =>
-      prevMessages.map(msg => {
+    setMessages(prevMessages => {
+      return prevMessages.map(msg => {
         if (msg.id !== messageId) return msg;
-
-        const currentUser = "currentUser"; // Replace with actual user ID
-        const existingReactionIndex = msg.reactions?.findIndex(
-          r => r.tagName === tagName
-        ) ?? -1;
-
+        
+        const currentUser = 'currentUser';
+        const reactions = msg.reactions || [];
+        const reactionIndex = reactions.findIndex(r => r.tagName === tagName);
+        
         // If reaction exists
-        if (existingReactionIndex >= 0) {
-          const existingReaction = msg.reactions![existingReactionIndex];
+        if (reactionIndex >= 0) {
+          const existingReaction = reactions[reactionIndex];
           const userIndex = existingReaction.users.indexOf(currentUser);
           
           // If user already reacted, remove their reaction
@@ -81,63 +80,68 @@ export default function Home() {
             
             // If no more users, remove the reaction
             if (updatedUsers.length === 0) {
-              const updatedReactions = [...(msg.reactions || [])];
-              updatedReactions.splice(existingReactionIndex, 1);
+              const updatedReactions = [...reactions];
+              updatedReactions.splice(reactionIndex, 1);
               return {
                 ...msg,
-                reactions: updatedReactions,
+                reactions: updatedReactions
               };
             }
             
             // Otherwise, update the count
             return {
               ...msg,
-              reactions: msg.reactions!.map((r, i) =>
-                i === existingReactionIndex
+              reactions: reactions.map((r, i) =>
+                i === reactionIndex
                   ? {
                       ...r,
                       count: r.count - 1,
-                      users: updatedUsers,
+                      users: updatedUsers
                     }
                   : r
-              ),
+              )
+            };
+          } 
+          // If user hasn't reacted, add their reaction
+          else {
+            return {
+              ...msg,
+              reactions: reactions.map((r, i) =>
+                i === reactionIndex
+                  ? {
+                      ...r,
+                      count: r.count + 1,
+                      users: [...r.users, currentUser]
+                    }
+                  : r
+              )
             };
           }
-          
-          // If user hasn't reacted, add their reaction
+        } 
+        // If this is a new reaction
+        else {
           return {
             ...msg,
-            reactions: msg.reactions!.map((r, i) =>
-              i === existingReactionIndex
-                ? {
-                    ...r,
-                    count: r.count + 1,
-                    users: [...r.users, currentUser],
-                  }
-                : r
-            ),
+            reactions: [
+              ...reactions,
+              {
+                tagName,
+                count: 1,
+                users: [currentUser]
+              }
+            ]
           };
         }
-        
-        // If reaction doesn't exist, add it
-        return {
-          ...msg,
-          reactions: [
-            ...(msg.reactions || []),
-            {
-              tagName,
-              count: 1,
-              users: [currentUser],
-            },
-          ],
-        };
-      })
-    );
+      });
+    });
   };
   
   const handleAddNewTag = (tagName: string) => {
-    // Add the new tag to the list of all tags
-    setAllTags(prevTags => new Set([...prevTags, tagName]));
+    setAllTags(prevTags => {
+      const newTags = new Set(prevTags);
+      newTags.add(tagName);
+      return newTags;
+    });
   };
 
   return (
