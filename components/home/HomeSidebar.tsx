@@ -1,15 +1,15 @@
-// components/home/Sidebar.tsx
+// components/home/HomeSidebar.tsx
 import clsx from "clsx";
 import React from "react";
 
 import SidebarLayout from "../SidebarLayout";
 
 // SidebarProps is now empty or can be removed if no props are needed
-interface SidebarProps {}
+interface HomeSidebarProps {}
 
-const Sidebar: React.FC<
-  SidebarProps
-> = (/* props can be removed if SidebarProps is empty */) => {
+const HomeSidebar: React.FC<
+  HomeSidebarProps
+> = (/* props can be removed if HomeSidebarProps is empty */) => {
   const headerClasses = clsx(
     "flex items-center justify-center h-16",
     "border-b border-gray-700",
@@ -94,4 +94,4 @@ const Sidebar: React.FC<
   );
 };
 
-export default Sidebar;
+export default HomeSidebar;
