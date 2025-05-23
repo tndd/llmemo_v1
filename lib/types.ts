@@ -1,17 +1,44 @@
-export interface Reaction {
-  tagName: string; // Changed from emoji to tagName
-  count: number;
-  users: string[];
+export interface TrackTag {
+  tagName: string;
 }
 
-export interface Message {
+export interface Track {
   id: number;
   user: string;
-  avatar: string;
   time: string;
   text: string;
-  tags?: string[];
-  reactions?: Reaction[];
+  tags?: TrackTag[];
+}
+
+export type MemoDateCategory =
+  | "Today"
+  | "Yesterday"
+  | "Previous 7 Days"
+  | "This Month"
+  | "Older";
+
+export const MEMO_DATE_CATEGORIES: MemoDateCategory[] = [
+  "Today",
+  "Yesterday",
+  "Previous 7 Days",
+  "This Month",
+  "Older",
+];
+
+export interface CategorizedMemos {
+  Today: Memo[];
+  Yesterday: Memo[];
+  "Previous 7 Days": Memo[];
+  "This Month": Memo[];
+  Older: Memo[];
+}
+
+export interface Memo {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  tracks: Track[];
 }
 
 export type View = "home" | "library" | "stats" | "settings";
