@@ -1,4 +1,4 @@
-import { Message } from "@/lib/types";
+import { Message, Tag } from "@/lib/types";
 import clsx from "clsx";
 import Image from "next/image";
 import React from "react";
@@ -8,8 +8,7 @@ import AddReaction from "./AddReaction";
 interface MessageListProps {
   messages: Message[];
   selectedTag: string | null;
-  onReaction?: (messageId: number, tagName: string) => void;
-  onAddNewTag?: (tagName: string) => void;
+  onToggleTag?: (messageId: number, tagName: string) => void;
   availableTags?: string[];
   currentUser?: string;
   showActions?: boolean;
@@ -18,8 +17,7 @@ interface MessageListProps {
 const MessageList: React.FC<MessageListProps> = ({
   messages,
   selectedTag,
-  onReaction,
-  onAddNewTag,
+  onToggleTag,
   availableTags = [],
   currentUser = "currentUser",
   showActions = true,
@@ -44,15 +42,15 @@ const MessageList: React.FC<MessageListProps> = ({
 
   const filteredMessages = selectedTag
     ? messages.filter(
-        (msg) => msg.tags && msg.tags.includes(selectedTag),
+        (msg) => msg.tags?.some((tag: Tag) => tag.tagName === selectedTag)
       )
     : messages;
 
-  const handleAddReaction = (
+  const handleToggleTagInternal = (
     messageId: number,
     tagName: string
   ): void => {
-    onReaction?.(messageId, tagName);
+    onToggleTag?.(messageId, tagName);
   };
 
   return (
@@ -73,11 +71,11 @@ const MessageList: React.FC<MessageListProps> = ({
             </div>
             <p className={textClasses}>{msg.text}</p>
 
-            {msg.reactions && msg.reactions.length > 0 && (
+            {msg.tags && msg.tags.length > 0 && (
               <MessageReactions
-                reactions={msg.reactions || []}
-                onReactionClick={(tagName: string) =>
-                  handleAddReaction(msg.id, tagName)
+                tags={msg.tags || []}
+                onTagClick={(tagName: string) =>
+                  handleToggleTagInternal(msg.id, tagName)
                 }
                 currentUser={currentUser}
               />
@@ -86,14 +84,13 @@ const MessageList: React.FC<MessageListProps> = ({
             {showActions && (
               <div className={messageActionsClasses}>
                 <AddReaction
-                  onAddReaction={(tagName: string) =>
-                    handleAddReaction(msg.id, tagName)
+                  onAddTag={(tagName: string) =>
+                    handleToggleTagInternal(msg.id, tagName)
                   }
-                  currentReactions={
-                    msg.reactions?.map((r) => r.tagName) || []
+                  currentTags={
+                    msg.tags?.map((t) => t.tagName) || []
                   }
                   availableTags={availableTags}
-                  onAddNewTag={onAddNewTag}
                 />
               </div>
             )}

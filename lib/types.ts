@@ -1,5 +1,5 @@
-export interface Reaction {
-  tagName: string; // Changed from emoji to tagName
+export interface Tag {
+  tagName: string;
   count: number;
   users: string[];
 }
@@ -10,8 +10,7 @@ export interface Message {
   avatar: string;
   time: string;
   text: string;
-  tags?: string[];
-  reactions?: Reaction[];
+  tags?: Tag[];
 }
 
 export interface Memo {
@@ -20,7 +19,6 @@ export interface Memo {
   createdAt: string;
   updatedAt: string;
   messages: Message[];
-  tags?: string[];
 }
 
 export type View = "home" | "library" | "stats" | "settings";

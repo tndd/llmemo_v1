@@ -1,30 +1,26 @@
 // components/library/LibraryView.tsx
 "use client";
 
-import { Message } from "@/lib/types";
+import { Message, Tag } from "@/lib/types";
 import React, { useState } from "react";
 import LibrarySidebar from "./LibrarySidebar";
 import { MessageList } from "@/components/message";
 import clsx from "clsx";
 
 interface LibraryViewProps {
-  messages: Message[];
+  allMessages: Message[];
   allTags: Set<string>;
-  onReaction?: (messageId: number, tagName: string) => void;
-  onAddNewTag?: (tagName: string) => void;
+  onToggleTag?: (messageId: number, tagName: string) => void;
   currentUser?: string;
 }
 
 const LibraryView: React.FC<LibraryViewProps> = ({
-  messages,
+  allMessages,
   allTags,
-  onReaction,
-  onAddNewTag,
+  onToggleTag,
   currentUser = "currentUser",
 }) => {
-  const [selectedTag, setSelectedTag] = useState<string | null>(
-    null,
-  );
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   const handleSelectTag = (tag: string | null) => {
     setSelectedTag((prevSelectedTag) =>
@@ -33,12 +29,10 @@ const LibraryView: React.FC<LibraryViewProps> = ({
   };
 
   const filteredMessages = selectedTag
-    ? messages.filter((msg) =>
-        msg.reactions?.some(
-          (reaction) => reaction.tagName === selectedTag,
-        ),
+    ? allMessages.filter((msg) =>
+        msg.tags?.some((tag: Tag) => tag.tagName === selectedTag)
       )
-    : messages;
+    : allMessages;
 
   return (
     <div className={clsx("flex flex-grow h-full")}>
@@ -71,9 +65,8 @@ const LibraryView: React.FC<LibraryViewProps> = ({
         </div>
         <MessageList
           messages={filteredMessages}
-          selectedTag={null}
-          onReaction={onReaction}
-          onAddNewTag={onAddNewTag}
+          selectedTag={null} 
+          onToggleTag={onToggleTag} 
           availableTags={Array.from(allTags)}
           currentUser={currentUser}
           showActions={true}
