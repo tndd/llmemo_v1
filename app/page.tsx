@@ -77,9 +77,8 @@ export default function Home() {
       const currentMessages = memo.messages;
       const newMessage: Message = {
         id:
-          currentMessages.length > 0
-            ? Math.max(...currentMessages.map((m) => m.id)) + 1
-            : 1,
+          // Calculate a globally unique ID
+          prevMemos.flatMap(m => m.messages).reduce((maxId, msg) => Math.max(maxId, msg.id), 0) + 1,
         user: "Your Name",
         time: new Date().toLocaleTimeString([], {
           hour: "2-digit",
@@ -100,10 +99,12 @@ export default function Home() {
   };
 
   const handleToggleTag = (messageId: number, tagName: string) => {
-    if (!activeMemoId) return;
-
     setMemos(prevMemos => prevMemos.map(memo => {
-      if (memo.id !== activeMemoId) return memo;
+      // Check if this memo contains the message to be updated
+      const messageExistsInMemo = memo.messages.some(msg => msg.id === messageId);
+      if (!messageExistsInMemo) {
+        return memo; // Not the target memo, return as is
+      }
 
       const updatedMessages = memo.messages.map((msg) => {
         if (msg.id !== messageId) return msg;
