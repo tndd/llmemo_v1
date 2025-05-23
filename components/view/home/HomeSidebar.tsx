@@ -35,7 +35,7 @@ const HomeSidebar: React.FC<HomeSidebarProps> = ({
 
   const linkClasses = (isActive: boolean) =>
     clsx(
-      "block px-2 py-1 rounded truncate",
+      "block px-2 py-1 rounded truncate text-sm", // Added text-sm here
       "hover:bg-gray-700",
       isActive ? "bg-gray-600 font-semibold" : "",
     );
