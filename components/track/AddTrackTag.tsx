@@ -2,17 +2,17 @@
 
 import React, { useState, useRef, useEffect } from "react";
 
-interface AddTagProps {
-  onToggleTag: (tagName: string) => void; // For adding/removing tag on current message
+interface AddTrackTagProps {
+  onToggleTag: (tagName: string) => void; // For adding/removing tag on current track
   onAddNewGlobalTag?: (newTagName: string) => void; // For adding tag to global list
-  currentTagsOnMessage?: string[];
+  currentTagsOnTrack?: string[];
   allAvailableTags: string[];
 }
 
-const AddTag: React.FC<AddTagProps> = ({
+const AddTrackTag: React.FC<AddTrackTagProps> = ({
   onToggleTag,
   onAddNewGlobalTag,
-  currentTagsOnMessage = [],
+  currentTagsOnTrack = [],
   allAvailableTags = [],
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +53,7 @@ const AddTag: React.FC<AddTagProps> = ({
     e.preventDefault();
     const tagName = newTagInput.trim();
     if (tagName) {
-      onToggleTag(tagName); // Adds tag to current message
+      onToggleTag(tagName); // Adds tag to current track
 
       // Add to global list if function provided and tag is not already in global list
       if (onAddNewGlobalTag && !allAvailableTags.includes(tagName)) {
@@ -64,9 +64,9 @@ const AddTag: React.FC<AddTagProps> = ({
     }
   };
 
-  // Tags to show in the selection list (all available tags not already on the message)
+  // Tags to show in the selection list (all available tags not already on the track)
   const tagsForSelectionList = allAvailableTags.filter(
-    (tag) => !currentTagsOnMessage.includes(tag),
+    (tag) => !currentTagsOnTrack.includes(tag),
   );
 
   return (
@@ -141,4 +141,4 @@ const AddTag: React.FC<AddTagProps> = ({
   );
 };
 
-export default AddTag;
+export default AddTrackTag;

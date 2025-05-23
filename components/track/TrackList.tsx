@@ -1,22 +1,22 @@
-import { Message, MessageTag } from "@/lib/types";
+import { Track, TrackTag } from "@/lib/types";
 import clsx from "clsx";
 import Image from "next/image";
 import React from "react";
-import MessageTags from "./MessageTags";
-import AddTag from "./AddTag";
+import TrackTags from "./TrackTags";
+import AddTrackTag from "./AddTrackTag";
 
-interface MessageListProps {
-  messages: Message[];
+interface TrackListProps {
+  tracks: Track[];
   selectedTag: string | null;
-  onToggleTag?: (messageId: number, tagName: string) => void;
+  onToggleTag?: (trackId: number, tagName: string) => void;
   onAddNewGlobalTag?: (newTagName: string) => void;
   availableTags?: string[];
   currentUser?: string;
   showActions?: boolean;
 }
 
-const MessageList: React.FC<MessageListProps> = ({
-  messages,
+const TrackList: React.FC<TrackListProps> = ({
+  tracks,
   selectedTag,
   onToggleTag,
   onAddNewGlobalTag,
@@ -42,48 +42,48 @@ const MessageList: React.FC<MessageListProps> = ({
     "flex items-center space-x-1 mt-1",
   );
 
-  const filteredMessages = selectedTag
-    ? messages.filter((msg) =>
-        msg.tags?.some((tag: MessageTag) => tag.tagName === selectedTag),
+  const filteredTracks = selectedTag
+    ? tracks.filter((trk) =>
+        trk.tags?.some((tag: TrackTag) => tag.tagName === selectedTag),
       )
-    : messages;
+    : tracks;
 
   const handleToggleTagInternal = (
-    messageId: number,
+    trackId: number,
     tagName: string,
   ): void => {
-    onToggleTag?.(messageId, tagName);
+    onToggleTag?.(trackId, tagName);
   };
 
   return (
     <div className={containerClasses}>
-      {filteredMessages.map((msg) => (
-        <div key={msg.id} className={messageRowClasses}>
+      {filteredTracks.map((trk) => (
+        <div key={trk.id} className={messageRowClasses}>
           <div className={messageContentClasses}>
             <div className={userRowClasses}>
-              <span className={userNameClasses}>{msg.user}</span>
-              <span className={timeClasses}>{msg.time}</span>
+              <span className={userNameClasses}>{trk.user}</span>
+              <span className={timeClasses}>{trk.time}</span>
             </div>
-            <p className={textClasses}>{msg.text}</p>
+            <p className={textClasses}>{trk.text}</p>
 
-            {msg.tags && msg.tags.length > 0 && (
-              <MessageTags
-                tags={msg.tags || []}
+            {trk.tags && trk.tags.length > 0 && (
+              <TrackTags
+                tags={trk.tags || []}
                 onTagClick={(tagName: string) =>
-                  handleToggleTagInternal(msg.id, tagName)
+                  handleToggleTagInternal(trk.id, tagName)
                 }
               />
             )}
 
             {showActions && (
               <div className={messageActionsClasses}>
-                <AddTag
+                <AddTrackTag
                   onToggleTag={(tagName: string) =>
-                    handleToggleTagInternal(msg.id, tagName)
+                    handleToggleTagInternal(trk.id, tagName)
                   }
                   onAddNewGlobalTag={onAddNewGlobalTag}
-                  currentTagsOnMessage={
-                    msg.tags?.map((t) => t.tagName) || []
+                  currentTagsOnTrack={
+                    trk.tags?.map((t: TrackTag) => t.tagName) || []
                   }
                   allAvailableTags={availableTags}
                 />
@@ -96,4 +96,4 @@ const MessageList: React.FC<MessageListProps> = ({
   );
 };
 
-export default MessageList;
+export default TrackList;

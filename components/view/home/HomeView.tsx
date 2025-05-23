@@ -1,19 +1,18 @@
 "use client";
 import HomeSidebar from "@/components/view/home/HomeSidebar";
-import { MessageList, MessageInput } from "@/components/message";
+import { TrackList, TrackInput } from "@/components/track";
 import {
-  Message,
+  Track,
   Memo,
-  Tag,
   CategorizedMemos,
 } from "@/lib/types";
 import clsx from "clsx";
-import React, { useState, useMemo, useCallback } from "react";
+import React from "react";
 
 interface HomeViewProps {
-  messages: Message[];
-  onSendMessage: (inputValue: string) => void;
-  onToggleTag?: (messageId: number, tagName: string) => void;
+  tracks: Track[];
+  onSendTrack: (inputValue: string) => void;
+  onToggleTag?: (trackId: number, tagName: string) => void;
   onAddNewGlobalTag?: (newTagName: string) => void;
   availableTags?: string[];
   currentUser?: string;
@@ -25,8 +24,8 @@ interface HomeViewProps {
 }
 
 const HomeView: React.FC<HomeViewProps> = ({
-  messages,
-  onSendMessage,
+  tracks,
+  onSendTrack,
   onToggleTag,
   onAddNewGlobalTag,
   availableTags = [],
@@ -37,21 +36,6 @@ const HomeView: React.FC<HomeViewProps> = ({
   activeMemoTitle = "Memo",
   categorizedMemos,
 }) => {
-  const [inputValue, setInputValue] = useState("");
-
-  const handleSendMessageInternal = () => {
-    if (inputValue.trim() !== "") {
-      onSendMessage(inputValue);
-      setInputValue("");
-    }
-  };
-
-  const handleInputChangeForMessageInput = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setInputValue(e.target.value);
-  };
-
   return (
     <div className={clsx("flex flex-grow h-full")}>
       <HomeSidebar
@@ -74,8 +58,8 @@ const HomeView: React.FC<HomeViewProps> = ({
             {activeMemoTitle || "(Untitled Memo)"}
           </h2>
         </div>
-        <MessageList
-          messages={messages}
+        <TrackList
+          tracks={tracks}
           selectedTag={null}
           onToggleTag={onToggleTag}
           onAddNewGlobalTag={onAddNewGlobalTag}
@@ -83,10 +67,9 @@ const HomeView: React.FC<HomeViewProps> = ({
           currentUser={currentUser}
           showActions={true}
         />
-        <MessageInput
-          inputValue={inputValue}
-          onInputChange={handleInputChangeForMessageInput}
-          onSendMessage={handleSendMessageInternal}
+        <TrackInput
+          onSendTrack={onSendTrack}
+          disabled={!activeMemoId}
         />
       </div>
     </div>

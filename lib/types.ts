@@ -1,13 +1,13 @@
-export interface MessageTag {
+export interface TrackTag {
   tagName: string;
 }
 
-export interface Message {
+export interface Track {
   id: number;
   user: string;
   time: string;
   text: string;
-  tags?: MessageTag[];
+  tags?: TrackTag[];
 }
 
 export type MemoDateCategory =
@@ -38,7 +38,7 @@ export interface Memo {
   title: string;
   createdAt: string;
   updatedAt: string;
-  messages: Message[];
+  tracks: Track[];
 }
 
 export type View = "home" | "library" | "stats" | "settings";

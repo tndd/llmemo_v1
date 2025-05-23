@@ -7,26 +7,27 @@ import StatsView from "@/components/view/stats/StatsView";
 import { useState, useEffect, useMemo } from "react";
 import {
   View,
-  Message,
+  Track,
   Memo,
-  MessageTag,
+  TrackTag,
   CategorizedMemos,
   MEMO_DATE_CATEGORIES,
   MemoDateCategory,
 } from "@/lib/types";
-import { initialMemos } from "../lib/data";
 
-// Function to get all unique tag names from all messages in all memos
+// Function to get all unique tag names from all tracks in all memos
 const getAllUniqueTagNamesFromMemos = (
   memos: Memo[],
 ): Set<string> => {
   const tagNames = new Set<string>();
   memos.forEach((memo) => {
-    memo.messages.forEach((message) => {
-      message.tags?.forEach((tag: MessageTag) =>
-        tagNames.add(tag.tagName),
-      );
-    });
+    if (memo.tracks) {
+      memo.tracks.forEach((track: Track) => {
+        track.tags?.forEach((tag: TrackTag) =>
+          tagNames.add(tag.tagName),
+        );
+      });
+    }
   });
   return tagNames;
 };
@@ -87,25 +88,92 @@ const categorizeMemosByDate = (
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<View>("home");
-  const [memos, setMemos] = useState<Memo[]>(initialMemos);
-  const [activeMemoId, setActiveMemoId] = useState<string | null>(
-    initialMemos.length > 0 ? initialMemos[0].id : null,
-  );
-  const [
-    availableTagNamesForActiveMemo,
-    setAvailableTagNamesForActiveMemo,
-  ] = useState<Set<string>>(new Set());
-  const [allTagNames, setAllTagNames] = useState<Set<string>>(
-    () => getAllUniqueTagNamesFromMemos(initialMemos),
-  );
+  const [memos, setMemos] = useState<Memo[]>([]);
+  const [activeMemoId, setActiveMemoId] = useState<string | null>(null);
+  const [allAvailableTags, setAllAvailableTags] = useState<string[]>([]);
+  const [availableTagNamesForActiveMemo, setAvailableTagNamesForActiveMemo] = useState<Set<string>>(new Set());
+
+  const initializeDefaultMemo = () => {
+    const initialMemoId = Date.now().toString();
+    const newMemo: Memo = {
+      id: initialMemoId,
+      title: "新しいメモ",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      tracks: [],
+    };
+    setMemos([newMemo]);
+    setActiveMemoId(initialMemoId);
+    localStorage.setItem("memos", JSON.stringify([newMemo]));
+    localStorage.setItem("activeMemoId", initialMemoId);
+  };
 
   useEffect(() => {
-    if (memos.length === 0) {
-      console.log(
-        "No initial memos loaded, or initialMemos was empty.",
-      );
+    const storedMemos = localStorage.getItem("memos");
+    if (storedMemos) {
+      try {
+        const parsedMemos: any[] = JSON.parse(storedMemos);
+
+        if (!Array.isArray(parsedMemos)) {
+          console.error("Stored memos is not an array, initializing default.");
+          initializeDefaultMemo();
+          return;
+        }
+
+        const fullyInitializedMemos = parsedMemos.map((memo: any): Memo => {
+          const tracks = (Array.isArray(memo.tracks) ? memo.tracks : []).map((track: any): Track => ({
+            id: track.id ?? Date.now() + Math.random(),
+            user: track.user ?? "Your Name",
+            time: track.time ?? new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            text: track.text ?? "",
+            tags: Array.isArray(track.tags) ? track.tags : [],
+          }));
+          return {
+            id: memo.id ?? Date.now().toString() + Math.random().toString(),
+            title: memo.title ?? "新しいメモ",
+            createdAt: memo.createdAt ?? new Date().toISOString(),
+            updatedAt: memo.updatedAt ?? new Date().toISOString(),
+            tracks: tracks,
+          };
+        });
+
+        setMemos(fullyInitializedMemos);
+
+        if (fullyInitializedMemos.length > 0) {
+          const lastActiveMemoId = localStorage.getItem("activeMemoId");
+          if (lastActiveMemoId && fullyInitializedMemos.find(m => m.id === lastActiveMemoId)) {
+            setActiveMemoId(lastActiveMemoId);
+          } else {
+            setActiveMemoId(fullyInitializedMemos[0].id);
+          }
+        } else {
+          initializeDefaultMemo();
+        }
+      } catch (error) {
+        console.error("Failed to parse memos from localStorage or data malformed:", error);
+        initializeDefaultMemo();
+      }
+    } else {
+      initializeDefaultMemo();
     }
   }, []);
+
+  useEffect(() => {
+    if (memos.length > 0) {
+      localStorage.setItem("memos", JSON.stringify(memos));
+      const allTags = getAllUniqueTagNamesFromMemos(memos);
+      setAllAvailableTags(Array.from(allTags));
+    }
+  }, [memos]);
+
+  useEffect(() => {
+    if (activeMemoId) {
+      localStorage.setItem("activeMemoId", activeMemoId);
+    }
+  }, [activeMemoId]);
 
   useEffect(() => {
     const currentActiveMemo = memos.find(
@@ -113,9 +181,9 @@ export default function Home() {
     );
     if (currentActiveMemo) {
       const currentMemoTagNames = new Set<string>();
-      currentActiveMemo.messages.forEach((message) => {
-        if (message.tags) {
-          message.tags.forEach((tag: MessageTag) =>
+      currentActiveMemo.tracks.forEach((track: Track) => {
+        if (track.tags) {
+          track.tags.forEach((tag: TrackTag) =>
             currentMemoTagNames.add(tag.tagName),
           );
         }
@@ -137,27 +205,26 @@ export default function Home() {
       title: `新しいメモ ${memos.length + 1}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      messages: [],
+      tracks: [],
     };
     setMemos((prevMemos) => [newMemo, ...prevMemos]);
     setActiveMemoId(newMemoId);
   };
 
-  const handleSendMessage = (inputValue: string) => {
+  const handleSendTrack = (inputValue: string) => {
     if (inputValue.trim() === "" || !activeMemoId) return;
 
     setMemos((prevMemos) =>
       prevMemos.map((memo) => {
         if (memo.id !== activeMemoId) return memo;
 
-        const currentMessages = memo.messages;
-        const newMessage: Message = {
+        const currentTracks = memo.tracks;
+        const newTrack: Track = {
           id:
-            // Calculate a globally unique ID
             prevMemos
-              .flatMap((m) => m.messages)
+              .flatMap((m) => m.tracks)
               .reduce(
-                (maxId, msg) => Math.max(maxId, msg.id),
+                (maxId, trk) => Math.max(maxId, trk.id),
                 0,
               ) + 1,
           user: "Your Name",
@@ -169,11 +236,11 @@ export default function Home() {
           tags: [],
         };
 
-        const updatedMessages = [...currentMessages, newMessage];
+        const updatedTracks = [...currentTracks, newTrack];
 
         return {
           ...memo,
-          messages: updatedMessages,
+          tracks: updatedTracks,
           updatedAt: new Date().toISOString(),
         };
       }),
@@ -181,47 +248,44 @@ export default function Home() {
   };
 
   const handleToggleTag = (
-    messageId: number,
+    trackId: number,
     tagName: string,
   ) => {
     setMemos((prevMemos) =>
       prevMemos.map((memo) => {
-        // Check if this memo contains the message to be updated
-        const messageExistsInMemo = memo.messages.some(
-          (msg) => msg.id === messageId,
+        const trackExistsInMemo = memo.tracks.some(
+          (trk) => trk.id === trackId,
         );
-        if (!messageExistsInMemo) {
-          return memo; // Not the target memo, return as is
+        if (!trackExistsInMemo) {
+          return memo;
         }
 
-        const updatedMessages = memo.messages.map((msg) => {
-          if (msg.id !== messageId) return msg;
+        const updatedTracks = memo.tracks.map((trk: Track) => {
+          if (trk.id !== trackId) return trk;
 
-          const currentTags = msg.tags || [];
+          const currentTags = trk.tags || [];
           const tagIndex = currentTags.findIndex(
-            (t: MessageTag) => t.tagName === tagName,
+            (t: TrackTag) => t.tagName === tagName,
           );
 
           if (tagIndex >= 0) {
-            // タグが既に存在する場合は削除
             const updatedTags = currentTags.filter(
               (_, i) => i !== tagIndex,
             );
             return {
-              ...msg,
+              ...trk,
               tags: updatedTags,
             };
           } else {
-            // タグが存在しない場合は追加
             return {
-              ...msg,
+              ...trk,
               tags: [...currentTags, { tagName }],
             };
           }
         });
         return {
           ...memo,
-          messages: updatedMessages,
+          tracks: updatedTracks,
           updatedAt: new Date().toISOString(),
         };
       }),
@@ -229,12 +293,12 @@ export default function Home() {
   };
 
   const handleAddNewTagGlobally = (newTagName: string) => {
-    setAllTagNames((prevTagNames) => {
-      if (prevTagNames.has(newTagName)) {
-        return prevTagNames; // Tag already exists, no change
+    setAllAvailableTags((prevTagNames) => {
+      if (prevTagNames.includes(newTagName)) {
+        return prevTagNames;
       }
-      const updatedTagNames = new Set(prevTagNames);
-      updatedTagNames.add(newTagName);
+      const updatedTagNames = [...prevTagNames];
+      updatedTagNames.push(newTagName);
       return updatedTagNames;
     });
   };
@@ -243,8 +307,8 @@ export default function Home() {
     return memos.find((memo) => memo.id === activeMemoId) || null;
   }, [memos, activeMemoId]);
 
-  const messagesForView = useMemo(() => {
-    return activeMemo?.messages || [];
+  const tracksForView = useMemo(() => {
+    return activeMemo?.tracks || [];
   }, [activeMemo]);
 
   const activeMemoTitle = useMemo(() => {
@@ -264,13 +328,13 @@ export default function Home() {
       <IconSidebar onViewChange={handleViewChange} />
       {currentView === "home" && (
         <HomeView
-          messages={messagesForView}
+          tracks={tracksForView}
           categorizedMemos={categorizedMemos}
           activeMemoId={activeMemoId}
           activeMemoTitle={activeMemoTitle}
-          onSendMessage={handleSendMessage}
+          onSendTrack={handleSendTrack}
           onToggleTag={handleToggleTag}
-          availableTags={Array.from(allTagNames)}
+          availableTags={allAvailableTags}
           onAddNewGlobalTag={handleAddNewTagGlobally}
           currentUser="currentUser"
           onCreateNewMemo={handleCreateNewMemo}
@@ -279,8 +343,8 @@ export default function Home() {
       )}
       {currentView === "library" && (
         <LibraryView
-          allMessages={memos.flatMap((memo) => memo.messages)}
-          allTags={allTagNames}
+          allTracks={memos.flatMap((memo) => memo.tracks ? memo.tracks : [])}
+          allTags={allAvailableTags}
           onToggleTag={handleToggleTag}
           onAddNewGlobalTag={handleAddNewTagGlobally}
           currentUser="currentUser"

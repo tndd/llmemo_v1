@@ -6,7 +6,7 @@ import React from "react";
 import SidebarLayout from "@/components/SidebarLayout";
 
 interface LibrarySidebarProps {
-  allTags: Set<string>;
+  allTags: string[];
   selectedTag: string | null;
   onSelectTag: (tag: string | null) => void;
 }
@@ -60,12 +60,12 @@ const LibrarySidebar: React.FC<LibrarySidebarProps> = ({
           Tags
         </div>
 
-        {allTags.size === 0 ? (
+        {allTags.length === 0 ? (
           <p className="text-gray-400 text-sm px-4">
             No tags yet.
           </p>
         ) : (
-          Array.from(allTags)
+          allTags
             .sort()
             .map((tag) => (
               <a

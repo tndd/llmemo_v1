@@ -1,15 +1,15 @@
 "use client";
 
-import { MessageTag } from "@/lib/types";
+import { TrackTag } from "@/lib/types";
 import clsx from "clsx";
 import React from "react";
 
-interface MessageTagsProps {
-  tags: MessageTag[];
+interface TrackTagsProps {
+  tags: TrackTag[];
   onTagClick: (tagName: string) => void;
 }
 
-const MessageTags: React.FC<MessageTagsProps> = ({
+const TrackTags: React.FC<TrackTagsProps> = ({
   tags,
   onTagClick,
 }) => {
@@ -37,4 +37,4 @@ const MessageTags: React.FC<MessageTagsProps> = ({
   );
 };
 
-export default MessageTags;
+export default TrackTags;

@@ -1,22 +1,22 @@
 // components/library/LibraryView.tsx
 "use client";
 
-import { Message, MessageTag } from "@/lib/types";
+import { Track, TrackTag } from "@/lib/types";
 import React, { useState } from "react";
 import LibrarySidebar from "./LibrarySidebar";
-import { MessageList } from "@/components/message";
+import { TrackList } from "@/components/track"; 
 import clsx from "clsx";
 
 interface LibraryViewProps {
-  allMessages: Message[];
-  allTags: Set<string>;
-  onToggleTag?: (messageId: number, tagName: string) => void;
+  allTracks: Track[];
+  allTags: string[];
+  onToggleTag?: (trackId: number, tagName: string) => void;
   onAddNewGlobalTag?: (newTagName: string) => void;
   currentUser?: string;
 }
 
 const LibraryView: React.FC<LibraryViewProps> = ({
-  allMessages,
+  allTracks,
   allTags,
   onToggleTag,
   onAddNewGlobalTag,
@@ -32,11 +32,11 @@ const LibraryView: React.FC<LibraryViewProps> = ({
     );
   };
 
-  const filteredMessages = selectedTag
-    ? allMessages.filter((msg) =>
-        msg.tags?.some((tag: MessageTag) => tag.tagName === selectedTag),
+  const filteredTracks = selectedTag
+    ? allTracks.filter((trk) =>
+        trk.tags?.some((tag: TrackTag) => tag.tagName === selectedTag),
       )
-    : allMessages;
+    : allTracks;
 
   return (
     <div className={clsx("flex flex-grow h-full")}>
@@ -56,23 +56,23 @@ const LibraryView: React.FC<LibraryViewProps> = ({
           )}
         >
           <h2 className={clsx("text-xl font-semibold")}>
-            {selectedTag ? `Tag: ${selectedTag}` : "All Messages"}
+            {selectedTag ? `Tag: ${selectedTag}` : "All Tracks"}
           </h2>
           {selectedTag && (
             <span className="ml-2 px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded">
-              {filteredMessages.length}{" "}
-              {filteredMessages.length === 1
-                ? "message"
-                : "messages"}
+              {filteredTracks.length}{" "}
+              {filteredTracks.length === 1
+                ? "track"
+                : "tracks"}
             </span>
           )}
         </div>
-        <MessageList
-          messages={filteredMessages}
-          selectedTag={null}
+        <TrackList 
+          tracks={filteredTracks}
+          selectedTag={null} 
           onToggleTag={onToggleTag}
           onAddNewGlobalTag={onAddNewGlobalTag}
-          availableTags={Array.from(allTags)}
+          availableTags={allTags}
           currentUser={currentUser}
           showActions={true}
         />
