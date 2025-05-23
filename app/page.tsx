@@ -1,9 +1,9 @@
 "use client";
 import IconSidebar from "@/components/IconSidebar";
-import HomeView from "@/components/home/HomeView";
-import LibraryView from "@/components/library/LibraryView";
-import SettingsView from "@/components/settings/SettingsView";
-import StatsView from "@/components/stats/StatsView";
+import HomeView from "@/components/view/home/HomeView";
+import LibraryView from "@/components/view/library/LibraryView";
+import SettingsView from "@/components/view/settings/SettingsView";
+import StatsView from "@/components/view/stats/StatsView";
 import { useState } from "react";
 import { View, Message } from "@/types"; // Added Message
 
@@ -169,8 +169,8 @@ export default function Home() {
         />
       )}
       {currentView === "library" && (
-        <LibraryView 
-          messages={messages} 
+        <LibraryView
+          messages={messages}
           allTags={allTags}
           onReaction={handleReaction}
           onAddNewTag={handleAddNewTag}

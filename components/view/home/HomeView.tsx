@@ -1,5 +1,5 @@
 "use client";
-import HomeSidebar from "@/components/home/HomeSidebar";
+import HomeSidebar from "@/components/view/home/HomeSidebar";
 import { MessageList, MessageInput } from "@/components/message";
 import { Message, Reaction } from "@/types";
 import clsx from "clsx";
