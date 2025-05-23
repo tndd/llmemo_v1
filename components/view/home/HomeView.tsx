@@ -1,7 +1,7 @@
 "use client";
 import HomeSidebar from "@/components/view/home/HomeSidebar";
 import { MessageList, MessageInput } from "@/components/message";
-import { Message, Reaction } from "@/lib/types";
+import { Message, Reaction, Memo } from "@/lib/types";
 import clsx from "clsx";
 import React, { useState, useMemo, useCallback } from 'react';
 
@@ -12,6 +12,11 @@ interface HomeViewProps {
   onAddNewTag?: (tagName: string) => void;
   availableTags?: string[];
   currentUser?: string;
+  onCreateNewMemo?: () => void;
+  memos?: Memo[];
+  activeMemoId?: string | null;
+  onSelectMemo?: (memoId: string) => void;
+  activeMemoTitle?: string;
 }
 
 const HomeView: React.FC<HomeViewProps> = ({
@@ -21,6 +26,11 @@ const HomeView: React.FC<HomeViewProps> = ({
   onAddNewTag,
   availableTags = [],
   currentUser = "currentUser",
+  onCreateNewMemo,
+  memos = [],
+  activeMemoId = null,
+  onSelectMemo,
+  activeMemoTitle = "Memo",
 }) => {
   const [inputValue, setInputValue] = useState("");
   // タグの選択状態は新しいMessageInputコンポーネント内で管理されるようになったため削除
@@ -62,7 +72,12 @@ const HomeView: React.FC<HomeViewProps> = ({
 
   return (
     <>
-      <HomeSidebar />
+      <HomeSidebar 
+        memos={memos} 
+        activeMemoId={activeMemoId} 
+        onCreateNewMemo={onCreateNewMemo}
+        onSelectMemo={onSelectMemo}
+      />
       <div
         className={clsx(
           "flex flex-col flex-grow h-full bg-white",
@@ -73,8 +88,8 @@ const HomeView: React.FC<HomeViewProps> = ({
             "flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white",
           )}
         >
-          <h2 className={clsx("text-xl font-semibold")}>
-            # general
+          <h2 className={clsx("text-xl font-semibold truncate")}>
+            {activeMemoTitle || "(Untitled Memo)"}
           </h2>
         </div>
         <MessageList

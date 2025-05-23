@@ -14,4 +14,13 @@ export interface Message {
   reactions?: Reaction[];
 }
 
+export interface Memo {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  messages: Message[];
+  tags?: string[];
+}
+
 export type View = "home" | "library" | "stats" | "settings";
