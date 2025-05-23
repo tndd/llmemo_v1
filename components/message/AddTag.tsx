@@ -2,15 +2,14 @@
 
 import React, { useState, useRef, useEffect } from "react";
 
-interface AddReactionProps {
-  // Consider renaming to AddTagProps or similar later
+interface AddTagProps {
   onToggleTag: (tagName: string) => void; // For adding/removing tag on current message
   onAddNewGlobalTag?: (newTagName: string) => void; // For adding tag to global list
   currentTagsOnMessage?: string[];
   allAvailableTags: string[];
 }
 
-const AddReaction: React.FC<AddReactionProps> = ({
+const AddTag: React.FC<AddTagProps> = ({
   onToggleTag,
   onAddNewGlobalTag,
   currentTagsOnMessage = [],
@@ -142,4 +141,4 @@ const AddReaction: React.FC<AddReactionProps> = ({
   );
 };
 
-export default AddReaction;
+export default AddTag;

@@ -4,12 +4,12 @@ import { Tag } from "@/lib/types";
 import clsx from "clsx";
 import React from "react";
 
-interface MessageReactionsProps {
+interface MessageTagsProps {
   tags: Tag[];
   onTagClick: (tagName: string) => void;
 }
 
-const MessageReactions: React.FC<MessageReactionsProps> = ({
+const MessageTags: React.FC<MessageTagsProps> = ({
   tags,
   onTagClick,
 }) => {
@@ -37,4 +37,4 @@ const MessageReactions: React.FC<MessageReactionsProps> = ({
   );
 };
 
-export default MessageReactions;
+export default MessageTags;

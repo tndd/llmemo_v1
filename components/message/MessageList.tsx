@@ -2,8 +2,8 @@ import { Message, Tag } from "@/lib/types";
 import clsx from "clsx";
 import Image from "next/image";
 import React from "react";
-import MessageReactions from "./MessageReactions";
-import AddReaction from "./AddReaction";
+import MessageTags from "./MessageTags";
+import AddTag from "./AddTag";
 
 interface MessageListProps {
   messages: Message[];
@@ -67,7 +67,7 @@ const MessageList: React.FC<MessageListProps> = ({
             <p className={textClasses}>{msg.text}</p>
 
             {msg.tags && msg.tags.length > 0 && (
-              <MessageReactions
+              <MessageTags
                 tags={msg.tags || []}
                 onTagClick={(tagName: string) =>
                   handleToggleTagInternal(msg.id, tagName)
@@ -77,7 +77,7 @@ const MessageList: React.FC<MessageListProps> = ({
 
             {showActions && (
               <div className={messageActionsClasses}>
-                <AddReaction
+                <AddTag
                   onToggleTag={(tagName: string) =>
                     handleToggleTagInternal(msg.id, tagName)
                   }
