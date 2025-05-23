@@ -1,4 +1,4 @@
-export interface Tag {
+export interface MessageTag {
   tagName: string;
 }
 
@@ -7,7 +7,7 @@ export interface Message {
   user: string;
   time: string;
   text: string;
-  tags?: Tag[];
+  tags?: MessageTag[];
 }
 
 export type MemoDateCategory =

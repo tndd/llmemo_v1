@@ -9,7 +9,7 @@ import {
   View,
   Message,
   Memo,
-  Tag,
+  MessageTag,
   CategorizedMemos,
   MEMO_DATE_CATEGORIES,
   MemoDateCategory,
@@ -23,7 +23,9 @@ const getAllUniqueTagNamesFromMemos = (
   const tagNames = new Set<string>();
   memos.forEach((memo) => {
     memo.messages.forEach((message) => {
-      message.tags?.forEach((tag) => tagNames.add(tag.tagName));
+      message.tags?.forEach((tag: MessageTag) =>
+        tagNames.add(tag.tagName),
+      );
     });
   });
   return tagNames;
@@ -113,7 +115,7 @@ export default function Home() {
       const currentMemoTagNames = new Set<string>();
       currentActiveMemo.messages.forEach((message) => {
         if (message.tags) {
-          message.tags.forEach((tag: Tag) =>
+          message.tags.forEach((tag: MessageTag) =>
             currentMemoTagNames.add(tag.tagName),
           );
         }
@@ -197,7 +199,7 @@ export default function Home() {
 
           const currentTags = msg.tags || [];
           const tagIndex = currentTags.findIndex(
-            (t: Tag) => t.tagName === tagName,
+            (t: MessageTag) => t.tagName === tagName,
           );
 
           if (tagIndex >= 0) {

@@ -1,11 +1,11 @@
 "use client";
 
-import { Tag } from "@/lib/types";
+import { MessageTag } from "@/lib/types";
 import clsx from "clsx";
 import React from "react";
 
 interface MessageTagsProps {
-  tags: Tag[];
+  tags: MessageTag[];
   onTagClick: (tagName: string) => void;
 }
 

@@ -1,7 +1,7 @@
 // components/library/LibraryView.tsx
 "use client";
 
-import { Message, Tag } from "@/lib/types";
+import { Message, MessageTag } from "@/lib/types";
 import React, { useState } from "react";
 import LibrarySidebar from "./LibrarySidebar";
 import { MessageList } from "@/components/message";
@@ -34,7 +34,7 @@ const LibraryView: React.FC<LibraryViewProps> = ({
 
   const filteredMessages = selectedTag
     ? allMessages.filter((msg) =>
-        msg.tags?.some((tag: Tag) => tag.tagName === selectedTag),
+        msg.tags?.some((tag: MessageTag) => tag.tagName === selectedTag),
       )
     : allMessages;
 

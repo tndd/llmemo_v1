@@ -1,4 +1,4 @@
-import { Message, Tag } from "@/lib/types";
+import { Message, MessageTag } from "@/lib/types";
 import clsx from "clsx";
 import Image from "next/image";
 import React from "react";
@@ -44,7 +44,7 @@ const MessageList: React.FC<MessageListProps> = ({
 
   const filteredMessages = selectedTag
     ? messages.filter((msg) =>
-        msg.tags?.some((tag: Tag) => tag.tagName === selectedTag),
+        msg.tags?.some((tag: MessageTag) => tag.tagName === selectedTag),
       )
     : messages;
 
