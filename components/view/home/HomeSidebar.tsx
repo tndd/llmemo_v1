@@ -26,10 +26,6 @@ const HomeSidebar: React.FC<
     "hover:bg-gray-700",
   );
 
-  const dmLinkClasses = clsx(
-    "flex items-center space-x-2 px-2 py-1 rounded",
-    "hover:bg-gray-700",
-  );
 
   return (
     <SidebarLayout>
@@ -63,26 +59,6 @@ const HomeSidebar: React.FC<
             <li>
               <a href="#" className={linkClasses}>
                 # announcements
-              </a>
-            </li>
-          </ul>
-        </div>
-        {/* Direct Messages */}
-        <div className="mt-4">
-          <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
-            Direct Messages
-          </h3>
-          <ul className="space-y-1">
-            <li>
-              <a href="#" className={dmLinkClasses}>
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>Alice</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className={dmLinkClasses}>
-                <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
-                <span>Bob</span>
               </a>
             </li>
           </ul>
