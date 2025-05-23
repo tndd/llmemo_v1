@@ -208,7 +208,6 @@ export default function Home() {
       {currentView === "home" && (
         <HomeView
           messages={messagesForView} 
-          memos={memos} 
           categorizedMemos={categorizedMemos}
           activeMemoId={activeMemoId} 
           activeMemoTitle={activeMemoTitle} 

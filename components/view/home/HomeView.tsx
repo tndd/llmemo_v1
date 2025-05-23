@@ -13,7 +13,6 @@ interface HomeViewProps {
   availableTags?: string[]; 
   currentUser?: string;
   onCreateNewMemo?: () => void; 
-  memos?: Memo[]; 
   activeMemoId?: string | null; 
   onSelectMemo?: (memoId: string) => void; 
   activeMemoTitle?: string;
@@ -28,7 +27,6 @@ const HomeView: React.FC<HomeViewProps> = ({
   availableTags = [],
   currentUser = "currentUser",
   onCreateNewMemo, 
-  memos = [], 
   activeMemoId = null, 
   onSelectMemo, 
   activeMemoTitle = "Memo",
@@ -43,7 +41,6 @@ const HomeView: React.FC<HomeViewProps> = ({
     }
   };
 
-  // Wrapper function for MessageInput's onInputChange
   const handleInputChangeForMessageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
@@ -51,7 +48,6 @@ const HomeView: React.FC<HomeViewProps> = ({
   return (
     <div className={clsx("flex flex-grow h-full")}>
       <HomeSidebar 
-        memos={memos} 
         categorizedMemos={categorizedMemos} 
         activeMemoId={activeMemoId} 
         onCreateNewMemo={onCreateNewMemo}
