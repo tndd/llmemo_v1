@@ -40,25 +40,68 @@ const HomeSidebar: React.FC<
         />
       </div>
       <div className="flex-grow p-4 space-y-2 overflow-y-auto">
-        {/* Channels */}
+        {/* Today's Memos */}
         <div>
           <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
-            Channels
+            Today
           </h3>
           <ul className="space-y-1">
             <li>
               <a href="#" className={linkClasses}>
-                # general
+                Meeting Notes
               </a>
             </li>
             <li>
               <a href="#" className={linkClasses}>
-                # random
+                Shopping List
               </a>
             </li>
             <li>
               <a href="#" className={linkClasses}>
-                # announcements
+                Project Ideas
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Yesterday's Memos */}
+        <div className="mt-4">
+          <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
+            Yesterday
+          </h3>
+          <ul className="space-y-1">
+            <li>
+              <a href="#" className={linkClasses}>
+                Team Meeting Summary
+              </a>
+            </li>
+            <li>
+              <a href="#" className={linkClasses}>
+                Code Review Notes
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* This Week's Memos */}
+        <div className="mt-4">
+          <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
+            Week
+          </h3>
+          <ul className="space-y-1">
+            <li>
+              <a href="#" className={linkClasses}>
+                Project Timeline
+              </a>
+            </li>
+            <li>
+              <a href="#" className={linkClasses}>
+                Weekly Goals
+              </a>
+            </li>
+            <li>
+              <a href="#" className={linkClasses}>
+                Learning Resources
               </a>
             </li>
           </ul>
