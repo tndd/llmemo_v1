@@ -1,5 +1,5 @@
 // components/IconSidebar.tsx
-import { View } from "@/types";
+import { View } from "@/lib/types";
 import clsx from "clsx";
 import React from "react";
 

@@ -1,7 +1,7 @@
 // components/library/LibraryView.tsx
 "use client";
 
-import { Message } from "@/types";
+import { Message } from "@/lib/types";
 import React, { useState } from "react";
 import LibrarySidebar from "./LibrarySidebar";
 import { MessageList } from "@/components/message";

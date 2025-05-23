@@ -5,7 +5,7 @@ import LibraryView from "@/components/view/library/LibraryView";
 import SettingsView from "@/components/view/settings/SettingsView";
 import StatsView from "@/components/view/stats/StatsView";
 import { useState } from "react";
-import { View, Message } from "@/types"; // Added Message
+import { View, Message } from "@/lib/types";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<View>("home");

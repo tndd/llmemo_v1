@@ -1,7 +1,7 @@
 "use client";
 import HomeSidebar from "@/components/view/home/HomeSidebar";
 import { MessageList, MessageInput } from "@/components/message";
-import { Message, Reaction } from "@/types";
+import { Message, Reaction } from "@/lib/types";
 import clsx from "clsx";
 import React, { useState, useMemo, useCallback } from 'react';
 

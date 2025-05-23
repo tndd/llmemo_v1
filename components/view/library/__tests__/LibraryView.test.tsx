@@ -1,6 +1,6 @@
 // components/view/library/__tests__/LibraryView.test.tsx
 import React from "react";
-import { Message } from "@/types";
+import { Message } from "@/lib/types";
 
 // Mock child components to focus on LibraryView's logic
 jest.mock("../LibrarySidebar", () => {
