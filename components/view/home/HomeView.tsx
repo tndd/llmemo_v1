@@ -1,20 +1,25 @@
 "use client";
 import HomeSidebar from "@/components/view/home/HomeSidebar";
 import { MessageList, MessageInput } from "@/components/message";
-import { Message, Memo, Tag, CategorizedMemos } from "@/lib/types"; 
+import {
+  Message,
+  Memo,
+  Tag,
+  CategorizedMemos,
+} from "@/lib/types";
 import clsx from "clsx";
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from "react";
 
 interface HomeViewProps {
   messages: Message[];
-  onSendMessage: (inputValue: string) => void; 
-  onToggleTag?: (messageId: number, tagName: string) => void; 
-  onAddNewGlobalTag?: (newTagName: string) => void; 
-  availableTags?: string[]; 
+  onSendMessage: (inputValue: string) => void;
+  onToggleTag?: (messageId: number, tagName: string) => void;
+  onAddNewGlobalTag?: (newTagName: string) => void;
+  availableTags?: string[];
   currentUser?: string;
-  onCreateNewMemo?: () => void; 
-  activeMemoId?: string | null; 
-  onSelectMemo?: (memoId: string) => void; 
+  onCreateNewMemo?: () => void;
+  activeMemoId?: string | null;
+  onSelectMemo?: (memoId: string) => void;
   activeMemoTitle?: string;
   categorizedMemos?: CategorizedMemos;
 }
@@ -22,18 +27,18 @@ interface HomeViewProps {
 const HomeView: React.FC<HomeViewProps> = ({
   messages,
   onSendMessage,
-  onToggleTag, 
-  onAddNewGlobalTag, 
+  onToggleTag,
+  onAddNewGlobalTag,
   availableTags = [],
   currentUser = "currentUser",
-  onCreateNewMemo, 
-  activeMemoId = null, 
-  onSelectMemo, 
+  onCreateNewMemo,
+  activeMemoId = null,
+  onSelectMemo,
   activeMemoTitle = "Memo",
   categorizedMemos,
 }) => {
   const [inputValue, setInputValue] = useState("");
-  
+
   const handleSendMessageInternal = () => {
     if (inputValue.trim() !== "") {
       onSendMessage(inputValue);
@@ -41,19 +46,25 @@ const HomeView: React.FC<HomeViewProps> = ({
     }
   };
 
-  const handleInputChangeForMessageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChangeForMessageInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setInputValue(e.target.value);
   };
 
   return (
     <div className={clsx("flex flex-grow h-full")}>
-      <HomeSidebar 
-        categorizedMemos={categorizedMemos} 
-        activeMemoId={activeMemoId} 
+      <HomeSidebar
+        categorizedMemos={categorizedMemos}
+        activeMemoId={activeMemoId}
         onCreateNewMemo={onCreateNewMemo}
         onSelectMemo={onSelectMemo}
       />
-      <div className={clsx("flex flex-col flex-grow h-full bg-white")}>
+      <div
+        className={clsx(
+          "flex flex-col flex-grow h-full bg-white",
+        )}
+      >
         <div
           className={clsx(
             "flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white",
@@ -65,12 +76,12 @@ const HomeView: React.FC<HomeViewProps> = ({
         </div>
         <MessageList
           messages={messages}
-          selectedTag={null} 
-          onToggleTag={onToggleTag} 
-          onAddNewGlobalTag={onAddNewGlobalTag} 
-          availableTags={availableTags} 
+          selectedTag={null}
+          onToggleTag={onToggleTag}
+          onAddNewGlobalTag={onAddNewGlobalTag}
+          availableTags={availableTags}
           currentUser={currentUser}
-          showActions={true} 
+          showActions={true}
         />
         <MessageInput
           inputValue={inputValue}

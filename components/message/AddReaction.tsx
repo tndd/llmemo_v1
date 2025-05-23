@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 
-interface AddReactionProps { // Consider renaming to AddTagProps or similar later
+interface AddReactionProps {
+  // Consider renaming to AddTagProps or similar later
   onToggleTag: (tagName: string) => void; // For adding/removing tag on current message
   onAddNewGlobalTag?: (newTagName: string) => void; // For adding tag to global list
   currentTagsOnMessage?: string[];
@@ -70,7 +71,8 @@ const AddReaction: React.FC<AddReactionProps> = ({
           e.preventDefault();
           e.stopPropagation();
           setIsOpen(!isOpen);
-          if (!isOpen) { // Focus input when opening
+          if (!isOpen) {
+            // Focus input when opening
             setTimeout(() => {
               inputRef.current?.focus();
             }, 0);
@@ -106,7 +108,9 @@ const AddReaction: React.FC<AddReactionProps> = ({
                   </button>
                 ))
               ) : (
-                <div className="text-xs text-gray-400">選択可能な既存タグはありません。</div>
+                <div className="text-xs text-gray-400">
+                  選択可能な既存タグはありません。
+                </div>
               )}
             </div>
           </div>

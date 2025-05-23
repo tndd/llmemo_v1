@@ -22,7 +22,9 @@ const LibraryView: React.FC<LibraryViewProps> = ({
   onAddNewGlobalTag,
   currentUser = "currentUser",
 }) => {
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>(
+    null,
+  );
 
   const handleSelectTag = (tag: string | null) => {
     setSelectedTag((prevSelectedTag) =>
@@ -32,7 +34,7 @@ const LibraryView: React.FC<LibraryViewProps> = ({
 
   const filteredMessages = selectedTag
     ? allMessages.filter((msg) =>
-        msg.tags?.some((tag: Tag) => tag.tagName === selectedTag)
+        msg.tags?.some((tag: Tag) => tag.tagName === selectedTag),
       )
     : allMessages;
 

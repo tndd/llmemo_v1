@@ -190,7 +190,9 @@ describe("LibraryView Logic (Conceptual)", () => {
         handleSelectTag("#test"); // Simulate selecting '#test'
         const filteredMessages = selectedTag
           ? sampleMessages.filter(
-              (msg) => msg.tags?.includes(selectedTag as string) ?? false,
+              (msg) =>
+                msg.tags?.includes(selectedTag as string) ??
+                false,
             )
           : sampleMessages;
         return {
@@ -232,7 +234,8 @@ describe("LibraryView Logic (Conceptual)", () => {
       handleSelectTag("#test"); // Deselect
       const filteredMessages = selectedTag
         ? sampleMessages.filter(
-            (msg) => msg.tags?.includes(selectedTag as string) ?? false,
+            (msg) =>
+              msg.tags?.includes(selectedTag as string) ?? false,
           )
         : sampleMessages;
       return {

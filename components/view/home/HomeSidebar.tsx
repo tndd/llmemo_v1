@@ -1,6 +1,11 @@
 import clsx from "clsx";
 import React from "react";
-import { Memo, CategorizedMemos, MEMO_DATE_CATEGORIES, MemoDateCategory } from "@/lib/types"; 
+import {
+  Memo,
+  CategorizedMemos,
+  MEMO_DATE_CATEGORIES,
+  MemoDateCategory,
+} from "@/lib/types";
 
 import SidebarLayout from "@/components/SidebarLayout";
 
@@ -28,12 +33,12 @@ const HomeSidebar: React.FC<HomeSidebarProps> = ({
     "focus:outline-none focus:border-blue-500",
   );
 
-  const linkClasses = (isActive: boolean) => clsx(
-    "block px-2 py-1 rounded truncate", 
-    "hover:bg-gray-700",
-    isActive ? "bg-gray-600 font-semibold" : "",
-  );
-
+  const linkClasses = (isActive: boolean) =>
+    clsx(
+      "block px-2 py-1 rounded truncate",
+      "hover:bg-gray-700",
+      isActive ? "bg-gray-600 font-semibold" : "",
+    );
 
   return (
     <SidebarLayout>
@@ -43,48 +48,60 @@ const HomeSidebar: React.FC<HomeSidebarProps> = ({
       <div className="p-4">
         <input
           type="text"
-          placeholder="Search Memos..." 
+          placeholder="Search Memos..."
           className={inputClasses}
         />
       </div>
       <div className="flex-grow p-4 space-y-2 overflow-y-auto">
-        
-        <button 
+        <button
           className="w-full mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
-          onClick={onCreateNewMemo} 
+          onClick={onCreateNewMemo}
         >
           + New Memo
         </button>
-        
-        {/* Memos List - Uses categorizedMemos exclusively */} 
-        {categorizedMemos && MEMO_DATE_CATEGORIES.some(category => categorizedMemos[category] && categorizedMemos[category].length > 0) ? (
-          MEMO_DATE_CATEGORIES.map(category => (
-            categorizedMemos[category] && categorizedMemos[category].length > 0 && (
-              <div key={category} className="mb-4">
-                <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
-                  {category}
-                </h3>
-                <ul className="space-y-1">
-                  {categorizedMemos[category].map((memo) => (
-                    <li key={memo.id}>
-                      <button 
-                        className={linkClasses(memo.id === activeMemoId) + " w-full text-left"}
-                        onClick={() => onSelectMemo?.(memo.id)}
-                        title={memo.title}
-                      >
-                        {memo.title || "(Untitled Memo)"} 
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )
-          ))
+
+        {/* Memos List - Uses categorizedMemos exclusively */}
+        {categorizedMemos &&
+        MEMO_DATE_CATEGORIES.some(
+          (category) =>
+            categorizedMemos[category] &&
+            categorizedMemos[category].length > 0,
+        ) ? (
+          MEMO_DATE_CATEGORIES.map(
+            (category) =>
+              categorizedMemos[category] &&
+              categorizedMemos[category].length > 0 && (
+                <div key={category} className="mb-4">
+                  <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
+                    {category}
+                  </h3>
+                  <ul className="space-y-1">
+                    {categorizedMemos[category].map((memo) => (
+                      <li key={memo.id}>
+                        <button
+                          className={
+                            linkClasses(
+                              memo.id === activeMemoId,
+                            ) + " w-full text-left"
+                          }
+                          onClick={() => onSelectMemo?.(memo.id)}
+                          title={memo.title}
+                        >
+                          {memo.title || "(Untitled Memo)"}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ),
+          )
         ) : (
-          <p className="text-gray-400 text-sm">No memos yet. Create one!</p>
+          <p className="text-gray-400 text-sm">
+            No memos yet. Create one!
+          </p>
         )}
 
-        {/* Dummy sections removed */} 
+        {/* Dummy sections removed */}
       </div>
     </SidebarLayout>
   );

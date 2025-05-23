@@ -43,14 +43,14 @@ const MessageList: React.FC<MessageListProps> = ({
   );
 
   const filteredMessages = selectedTag
-    ? messages.filter(
-        (msg) => msg.tags?.some((tag: Tag) => tag.tagName === selectedTag)
+    ? messages.filter((msg) =>
+        msg.tags?.some((tag: Tag) => tag.tagName === selectedTag),
       )
     : messages;
 
   const handleToggleTagInternal = (
     messageId: number,
-    tagName: string
+    tagName: string,
   ): void => {
     onToggleTag?.(messageId, tagName);
   };

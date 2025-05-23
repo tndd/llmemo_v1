@@ -18,7 +18,7 @@ const MessageReactions: React.FC<MessageReactionsProps> = ({
   const tagButtonClasses = clsx(
     "px-2 py-1 border rounded-full text-xs",
     "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200",
-    "transition-colors duration-150 ease-in-out"
+    "transition-colors duration-150 ease-in-out",
   );
 
   return (
