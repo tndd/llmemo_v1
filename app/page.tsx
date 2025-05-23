@@ -4,45 +4,35 @@ import HomeView from "@/components/view/home/HomeView";
 import LibraryView from "@/components/view/library/LibraryView";
 import SettingsView from "@/components/view/settings/SettingsView";
 import StatsView from "@/components/view/stats/StatsView";
-import { useState, useEffect } from "react"; 
+import { useState, useEffect, useMemo } from "react"; 
 import { View, Message, Memo, Tag } from "@/lib/types"; 
+import { initialMemos } from "../lib/data"; 
+
+// Function to get all unique tag names from all messages in all memos
+const getAllUniqueTagNamesFromMemos = (memos: Memo[]): Set<string> => {
+  const tagNames = new Set<string>();
+  memos.forEach(memo => {
+    memo.messages.forEach(message => {
+      message.tags?.forEach(tag => tagNames.add(tag.tagName));
+    });
+  });
+  return tagNames;
+};
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<View>("home");
-  const [memos, setMemos] = useState<Memo[]>([]);
-  const [activeMemoId, setActiveMemoId] = useState<string | null>(null);
+  const [memos, setMemos] = useState<Memo[]>(initialMemos); 
+  const [activeMemoId, setActiveMemoId] = useState<string | null>(
+    initialMemos.length > 0 ? initialMemos[0].id : null 
+  );
   const [availableTagNamesForActiveMemo, setAvailableTagNamesForActiveMemo] = useState<Set<string>>(new Set());
+  const [allTagNames, setAllTagNames] = useState<Set<string>>(() => 
+    getAllUniqueTagNamesFromMemos(initialMemos)
+  );
 
   useEffect(() => {
     if (memos.length === 0) {
-      const initialMessages: Message[] = [
-        {
-          id: 1,
-          user: "Alice",
-          avatar: "/next.svg",
-          time: "10:00 AM",
-          text: "こんにちは！これはサンプルメッセージです。",
-          tags: [],
-        },
-        {
-          id: 2,
-          user: "Bob",
-          avatar: "/next.svg",
-          time: "10:02 AM",
-          text: "これは別のサンプルメッセージです。Slack風のUIですね！",
-          tags: [],
-        },
-      ];
-      const newMemoId = `memo-${Date.now()}`;
-      const defaultMemo: Memo = {
-        id: newMemoId,
-        title: "最初のメモ",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        messages: initialMessages,
-      };
-      setMemos([defaultMemo]);
-      setActiveMemoId(newMemoId);
+      console.log("No initial memos loaded, or initialMemos was empty.");
     }
   }, []); 
 
@@ -74,7 +64,7 @@ export default function Home() {
       updatedAt: new Date().toISOString(),
       messages: [],
     };
-    setMemos(prevMemos => [...prevMemos, newMemo]);
+    setMemos(prevMemos => [newMemo, ...prevMemos]);
     setActiveMemoId(newMemoId);
   };
 
@@ -90,8 +80,7 @@ export default function Home() {
           currentMessages.length > 0
             ? Math.max(...currentMessages.map((m) => m.id)) + 1
             : 1,
-        user: "Your Name", 
-        avatar: "/next.svg", 
+        user: "Your Name",
         time: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
@@ -119,56 +108,23 @@ export default function Home() {
       const updatedMessages = memo.messages.map((msg) => {
         if (msg.id !== messageId) return msg;
 
-        const currentUser = "currentUser"; 
-        const currentTags = msg.tags || []; 
+        const currentTags = msg.tags || [];
         const tagIndex = currentTags.findIndex(
           (t: Tag) => t.tagName === tagName,
         );
 
-        if (tagIndex >= 0) { 
-          const existingTag = currentTags[tagIndex];
-          const userIndex = existingTag.users.indexOf(currentUser);
-
-          if (userIndex >= 0) { 
-            const updatedUsers = [...existingTag.users];
-            updatedUsers.splice(userIndex, 1);
-            if (updatedUsers.length === 0) { 
-              const updatedMessageTags = [...currentTags];
-              updatedMessageTags.splice(tagIndex, 1);
-              return {
-                ...msg,
-                tags: updatedMessageTags,
-              };
-            }
-            return {
-              ...msg,
-              tags: currentTags.map((t: Tag, i: number) =>
-                i === tagIndex
-                  ? { ...t, count: updatedUsers.length, users: updatedUsers }
-                  : t,
-              ),
-            };
-          } else { 
-            return {
-              ...msg,
-              tags: currentTags.map((t: Tag, i: number) =>
-                i === tagIndex
-                  ? { ...t, count: t.count + 1, users: [...t.users, currentUser] }
-                  : t,
-              ),
-            };
-          }
-        } else { 
+        if (tagIndex >= 0) {
+          // タグが既に存在する場合は削除
+          const updatedTags = currentTags.filter((_, i) => i !== tagIndex);
           return {
             ...msg,
-            tags: [
-              ...currentTags,
-              {
-                tagName,
-                count: 1,
-                users: [currentUser],
-              },
-            ],
+            tags: updatedTags,
+          };
+        } else {
+          // タグが存在しない場合は追加
+          return {
+            ...msg,
+            tags: [...currentTags, { tagName }],
           };
         }
       });
@@ -176,16 +132,32 @@ export default function Home() {
     }));
   };
 
-  const activeMemo = memos.find(memo => memo.id === activeMemoId);
-  const messagesForView = activeMemo?.messages || [];
-  const activeMemoTitle = activeMemo?.title || "";
+  const handleAddNewTagGlobally = (newTagName: string) => {
+    setAllTagNames(prevTagNames => {
+      if (prevTagNames.has(newTagName)) {
+        return prevTagNames; // Tag already exists, no change
+      }
+      const updatedTagNames = new Set(prevTagNames);
+      updatedTagNames.add(newTagName);
+      return updatedTagNames;
+    });
+  };
 
-  const allTagNamesFromAllMemos = new Set<string>();
-  memos.flatMap(memo => memo.messages).forEach(message => {
-    if (message.tags) {
-      message.tags.forEach((tag: Tag) => allTagNamesFromAllMemos.add(tag.tagName));
-    }
-  });
+  const activeMemo = useMemo(() => {
+    return memos.find((memo) => memo.id === activeMemoId) || null;
+  }, [memos, activeMemoId]);
+
+  const messagesForView = useMemo(() => {
+    return activeMemo?.messages || [];
+  }, [activeMemo]);
+
+  const activeMemoTitle = useMemo(() => {
+    return activeMemo?.title || "";
+  }, [activeMemo]);
+
+  const allTagNamesFromAllMemos = useMemo(() => {
+    return getAllUniqueTagNamesFromMemos(memos);
+  }, [memos]);
 
   return (
     <div className="flex h-screen antialiased text-gray-800">
@@ -198,7 +170,8 @@ export default function Home() {
           activeMemoTitle={activeMemoTitle} 
           onSendMessage={handleSendMessage}
           onToggleTag={handleToggleTag} 
-          availableTags={Array.from(availableTagNamesForActiveMemo)} 
+          availableTags={Array.from(allTagNames)} 
+          onAddNewGlobalTag={handleAddNewTagGlobally} 
           currentUser="currentUser" 
           onCreateNewMemo={handleCreateNewMemo} 
           onSelectMemo={setActiveMemoId} 
@@ -207,8 +180,9 @@ export default function Home() {
       {currentView === "library" && (
         <LibraryView
           allMessages={memos.flatMap(memo => memo.messages)} 
-          allTags={allTagNamesFromAllMemos} 
+          allTags={allTagNames} 
           onToggleTag={handleToggleTag} 
+          onAddNewGlobalTag={handleAddNewTagGlobally} 
           currentUser="currentUser"
         />
       )}

@@ -11,6 +11,7 @@ interface LibraryViewProps {
   allMessages: Message[];
   allTags: Set<string>;
   onToggleTag?: (messageId: number, tagName: string) => void;
+  onAddNewGlobalTag?: (newTagName: string) => void;
   currentUser?: string;
 }
 
@@ -18,6 +19,7 @@ const LibraryView: React.FC<LibraryViewProps> = ({
   allMessages,
   allTags,
   onToggleTag,
+  onAddNewGlobalTag,
   currentUser = "currentUser",
 }) => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -65,8 +67,9 @@ const LibraryView: React.FC<LibraryViewProps> = ({
         </div>
         <MessageList
           messages={filteredMessages}
-          selectedTag={null} 
-          onToggleTag={onToggleTag} 
+          selectedTag={null}
+          onToggleTag={onToggleTag}
+          onAddNewGlobalTag={onAddNewGlobalTag}
           availableTags={Array.from(allTags)}
           currentUser={currentUser}
           showActions={true}

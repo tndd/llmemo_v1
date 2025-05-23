@@ -9,6 +9,7 @@ interface MessageListProps {
   messages: Message[];
   selectedTag: string | null;
   onToggleTag?: (messageId: number, tagName: string) => void;
+  onAddNewGlobalTag?: (newTagName: string) => void;
   availableTags?: string[];
   currentUser?: string;
   showActions?: boolean;
@@ -18,6 +19,7 @@ const MessageList: React.FC<MessageListProps> = ({
   messages,
   selectedTag,
   onToggleTag,
+  onAddNewGlobalTag,
   availableTags = [],
   currentUser = "currentUser",
   showActions = true,
@@ -57,13 +59,6 @@ const MessageList: React.FC<MessageListProps> = ({
     <div className={containerClasses}>
       {filteredMessages.map((msg) => (
         <div key={msg.id} className={messageRowClasses}>
-          <Image
-            src={msg.avatar}
-            alt={`${msg.user} Avatar`}
-            width={40}
-            height={40}
-            className={avatarClasses}
-          />
           <div className={messageContentClasses}>
             <div className={userRowClasses}>
               <span className={userNameClasses}>{msg.user}</span>
@@ -77,20 +72,20 @@ const MessageList: React.FC<MessageListProps> = ({
                 onTagClick={(tagName: string) =>
                   handleToggleTagInternal(msg.id, tagName)
                 }
-                currentUser={currentUser}
               />
             )}
 
             {showActions && (
               <div className={messageActionsClasses}>
                 <AddReaction
-                  onAddTag={(tagName: string) =>
+                  onToggleTag={(tagName: string) =>
                     handleToggleTagInternal(msg.id, tagName)
                   }
-                  currentTags={
+                  onAddNewGlobalTag={onAddNewGlobalTag}
+                  currentTagsOnMessage={
                     msg.tags?.map((t) => t.tagName) || []
                   }
-                  availableTags={availableTags}
+                  allAvailableTags={availableTags}
                 />
               </div>
             )}

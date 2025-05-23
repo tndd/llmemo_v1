@@ -9,6 +9,7 @@ interface HomeViewProps {
   messages: Message[];
   onSendMessage: (inputValue: string) => void; 
   onToggleTag?: (messageId: number, tagName: string) => void; 
+  onAddNewGlobalTag?: (newTagName: string) => void; 
   availableTags?: string[]; 
   currentUser?: string;
   onCreateNewMemo?: () => void; 
@@ -22,6 +23,7 @@ const HomeView: React.FC<HomeViewProps> = ({
   messages,
   onSendMessage,
   onToggleTag, 
+  onAddNewGlobalTag, 
   availableTags = [],
   currentUser = "currentUser",
   onCreateNewMemo, 
@@ -66,6 +68,7 @@ const HomeView: React.FC<HomeViewProps> = ({
           messages={messages}
           selectedTag={null} 
           onToggleTag={onToggleTag} 
+          onAddNewGlobalTag={onAddNewGlobalTag} 
           availableTags={availableTags} 
           currentUser={currentUser}
           showActions={true} 
