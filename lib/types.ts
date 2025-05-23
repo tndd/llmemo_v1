@@ -10,6 +10,24 @@ export interface Message {
   tags?: Tag[];
 }
 
+export type MemoDateCategory = "Today" | "Yesterday" | "Previous 7 Days" | "This Month" | "Older";
+
+export const MEMO_DATE_CATEGORIES: MemoDateCategory[] = [
+  "Today",
+  "Yesterday",
+  "Previous 7 Days",
+  "This Month",
+  "Older",
+];
+
+export interface CategorizedMemos {
+  Today: Memo[];
+  Yesterday: Memo[];
+  "Previous 7 Days": Memo[];
+  "This Month": Memo[];
+  Older: Memo[];
+}
+
 export interface Memo {
   id: string;
   title: string;

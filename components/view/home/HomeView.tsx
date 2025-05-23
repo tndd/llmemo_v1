@@ -1,7 +1,7 @@
 "use client";
 import HomeSidebar from "@/components/view/home/HomeSidebar";
 import { MessageList, MessageInput } from "@/components/message";
-import { Message, Memo, Tag } from "@/lib/types"; 
+import { Message, Memo, Tag, CategorizedMemos } from "@/lib/types"; 
 import clsx from "clsx";
 import React, { useState, useMemo, useCallback } from 'react';
 
@@ -17,6 +17,7 @@ interface HomeViewProps {
   activeMemoId?: string | null; 
   onSelectMemo?: (memoId: string) => void; 
   activeMemoTitle?: string;
+  categorizedMemos?: CategorizedMemos;
 }
 
 const HomeView: React.FC<HomeViewProps> = ({
@@ -31,6 +32,7 @@ const HomeView: React.FC<HomeViewProps> = ({
   activeMemoId = null, 
   onSelectMemo, 
   activeMemoTitle = "Memo",
+  categorizedMemos,
 }) => {
   const [inputValue, setInputValue] = useState("");
   
@@ -50,6 +52,7 @@ const HomeView: React.FC<HomeViewProps> = ({
     <div className={clsx("flex flex-grow h-full")}>
       <HomeSidebar 
         memos={memos} 
+        categorizedMemos={categorizedMemos} 
         activeMemoId={activeMemoId} 
         onCreateNewMemo={onCreateNewMemo}
         onSelectMemo={onSelectMemo}

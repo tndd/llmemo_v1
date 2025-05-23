@@ -1,19 +1,21 @@
 // components/home/HomeSidebar.tsx
 import clsx from "clsx";
 import React from "react";
-import { Memo } from "@/lib/types"; // Added Memo
+import { Memo, CategorizedMemos, MEMO_DATE_CATEGORIES, MemoDateCategory } from "@/lib/types"; // Added Memo
 
 import SidebarLayout from "@/components/SidebarLayout";
 
 interface HomeSidebarProps {
-  memos?: Memo[];
+  memos?: Memo[]; // Will be deprecated in favor of categorizedMemos
+  categorizedMemos?: CategorizedMemos;
   activeMemoId?: string | null;
   onCreateNewMemo?: () => void;
   onSelectMemo?: (memoId: string) => void;
 }
 
 const HomeSidebar: React.FC<HomeSidebarProps> = ({
-  memos = [],
+  memos = [], // Keep for now, but will be replaced
+  categorizedMemos,
   activeMemoId = null,
   onCreateNewMemo,
   onSelectMemo,
@@ -57,8 +59,31 @@ const HomeSidebar: React.FC<HomeSidebarProps> = ({
           + New Memo
         </button>
         
-        {/* Memos List */}
-        {memos.length > 0 ? (
+        {/* Memos List - Updated to use categorizedMemos */} 
+        {categorizedMemos ? (
+          MEMO_DATE_CATEGORIES.map(category => (
+            categorizedMemos[category] && categorizedMemos[category].length > 0 && (
+              <div key={category} className="mb-4">
+                <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
+                  {category}
+                </h3>
+                <ul className="space-y-1">
+                  {categorizedMemos[category].map((memo) => (
+                    <li key={memo.id}>
+                      <button 
+                        className={linkClasses(memo.id === activeMemoId) + " w-full text-left"}
+                        onClick={() => onSelectMemo?.(memo.id)}
+                        title={memo.title}
+                      >
+                        {memo.title || "(Untitled Memo)"} 
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          ))
+        ) : memos.length > 0 ? ( // Fallback to old memos prop if categorizedMemos is not available
           <div>
             <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
               All Memos
@@ -67,9 +92,9 @@ const HomeSidebar: React.FC<HomeSidebarProps> = ({
               {memos.map((memo) => (
                 <li key={memo.id}>
                   <button 
-                    className={linkClasses(memo.id === activeMemoId) + " w-full text-left"} // Added w-full and text-left for button behavior
+                    className={linkClasses(memo.id === activeMemoId) + " w-full text-left"}
                     onClick={() => onSelectMemo?.(memo.id)}
-                    title={memo.title} // Added title attribute for full title on hover
+                    title={memo.title}
                   >
                     {memo.title || "(Untitled Memo)"} 
                   </button>
@@ -81,7 +106,7 @@ const HomeSidebar: React.FC<HomeSidebarProps> = ({
           <p className="text-gray-400 text-sm">No memos yet. Create one!</p>
         )}
 
-        {/* Dummy sections removed */}
+        {/* Dummy sections removed */} 
       </div>
     </SidebarLayout>
   );

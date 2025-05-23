@@ -5,7 +5,7 @@ import LibraryView from "@/components/view/library/LibraryView";
 import SettingsView from "@/components/view/settings/SettingsView";
 import StatsView from "@/components/view/stats/StatsView";
 import { useState, useEffect, useMemo } from "react"; 
-import { View, Message, Memo, Tag } from "@/lib/types"; 
+import { View, Message, Memo, Tag, CategorizedMemos, MEMO_DATE_CATEGORIES, MemoDateCategory } from "@/lib/types"; 
 import { initialMemos } from "../lib/data"; 
 
 // Function to get all unique tag names from all messages in all memos
@@ -17,6 +17,44 @@ const getAllUniqueTagNamesFromMemos = (memos: Memo[]): Set<string> => {
     });
   });
   return tagNames;
+};
+
+const categorizeMemosByDate = (memos: Memo[]): CategorizedMemos => {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
+  const sevenDaysAgo = new Date(today); sevenDaysAgo.setDate(today.getDate() - 7);
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const categorized: CategorizedMemos = {
+    Today: [],
+    Yesterday: [],
+    "Previous 7 Days": [],
+    "This Month": [],
+    Older: [],
+  };
+
+  memos.forEach(memo => {
+    const memoDate = new Date(memo.updatedAt);
+    if (memoDate >= today) {
+      categorized.Today.push(memo);
+    } else if (memoDate >= yesterday) {
+      categorized.Yesterday.push(memo);
+    } else if (memoDate >= sevenDaysAgo) {
+      categorized["Previous 7 Days"].push(memo);
+    } else if (memoDate >= firstDayOfMonth) {
+      categorized["This Month"].push(memo);
+    } else {
+      categorized.Older.push(memo);
+    }
+  });
+
+  // Sort memos within each category by updatedAt descending (newest first)
+  for (const category of MEMO_DATE_CATEGORIES) {
+    categorized[category].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  }
+
+  return categorized;
 };
 
 export default function Home() {
@@ -160,6 +198,10 @@ export default function Home() {
     return getAllUniqueTagNamesFromMemos(memos);
   }, [memos]);
 
+  const categorizedMemos = useMemo(() => {
+    return categorizeMemosByDate(memos);
+  }, [memos]);
+
   return (
     <div className="flex h-screen antialiased text-gray-800">
       <IconSidebar onViewChange={handleViewChange} />
@@ -167,6 +209,7 @@ export default function Home() {
         <HomeView
           messages={messagesForView} 
           memos={memos} 
+          categorizedMemos={categorizedMemos}
           activeMemoId={activeMemoId} 
           activeMemoTitle={activeMemoTitle} 
           onSendMessage={handleSendMessage}
