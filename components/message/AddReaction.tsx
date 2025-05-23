@@ -18,31 +18,36 @@ const AddReaction: React.FC<AddReactionProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [newTagInput, setNewTagInput] = useState(""); // State for new tag input
-  const containerRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null); // Ref for the dropdown wrapper
   const inputRef = useRef<HTMLInputElement>(null); // Ref for the new tag input field
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+    function handleClickOutside(event: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
-    };
-
+    }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside,
-      );
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [wrapperRef]);
+
+  const handleToggleDropdown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsOpen(!isOpen);
+    if (!isOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    }
+  };
 
   const handleExistingTagClick = (tagName: string) => {
     onToggleTag(tagName);
-    setIsOpen(false);
+    setNewTagInput(""); // Clear newTagInput instead of non-existent setSearchTerm
+    inputRef.current?.focus(); // Keep focus on input or allow re-focus for new tag entry
   };
 
   const handleAddNewTagSubmit = (e: React.FormEvent) => {
@@ -64,20 +69,10 @@ const AddReaction: React.FC<AddReactionProps> = ({
   );
 
   return (
-    <div className="relative inline-block" ref={containerRef}>
+    <div className="relative inline-block text-left" ref={wrapperRef}>
       <button
         className="text-gray-400 hover:text-gray-600 text-sm opacity-0 group-hover:opacity-100 transition-opacity"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsOpen(!isOpen);
-          if (!isOpen) {
-            // Focus input when opening
-            setTimeout(() => {
-              inputRef.current?.focus();
-            }, 0);
-          }
-        }}
+        onClick={handleToggleDropdown}
         aria-label="タグを追加・変更"
       >
         <span className="text-xs font-medium text-gray-500">
