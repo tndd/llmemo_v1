@@ -40,6 +40,14 @@ const HomeSidebar: React.FC<
         />
       </div>
       <div className="flex-grow p-4 space-y-2 overflow-y-auto">
+        {/* New Memo Button */}
+        <button 
+          className="w-full mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
+          onClick={() => console.log('New memo clicked')}
+        >
+          + New Memo
+        </button>
+        
         {/* Today's Memos */}
         <div>
           <h3 className="text-sm font-semibold text-gray-400 uppercase mb-1">
