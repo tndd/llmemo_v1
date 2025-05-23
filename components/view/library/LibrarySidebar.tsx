@@ -3,7 +3,7 @@
 
 import clsx from "clsx";
 import React from "react";
-import SidebarLayout from "../SidebarLayout";
+import SidebarLayout from "@/components/SidebarLayout";
 
 interface LibrarySidebarProps {
   allTags: Set<string>;

@@ -4,7 +4,7 @@ import {
   contentClasses,
   headerClasses,
   titleClasses,
-} from "@/styles";
+} from "@/lib/styles";
 import React from "react";
 
 const StatsView: React.FC = () => {

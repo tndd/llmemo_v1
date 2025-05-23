@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Reaction } from "@/types";
+import { Reaction } from "@/lib/types";
 
 interface MessageReactionsProps {
   reactions: Reaction[];

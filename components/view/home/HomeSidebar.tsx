@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import React from "react";
 
-import SidebarLayout from "../SidebarLayout";
+import SidebarLayout from "@/components/SidebarLayout";
 
 // SidebarProps is now empty or can be removed if no props are needed
 interface HomeSidebarProps {}
