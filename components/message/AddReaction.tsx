@@ -52,14 +52,16 @@ const AddReaction: React.FC<AddReactionProps> = ({
 
   const handleAddNewTagSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmedNewTag = newTagInput.trim();
-    if (trimmedNewTag) {
-      if (onAddNewGlobalTag) {
-        onAddNewGlobalTag(trimmedNewTag); // Add to global list
+    const tagName = newTagInput.trim();
+    if (tagName) {
+      onToggleTag(tagName); // Adds tag to current message
+
+      // Add to global list if function provided and tag is not already in global list
+      if (onAddNewGlobalTag && !allAvailableTags.includes(tagName)) {
+        onAddNewGlobalTag(tagName);
       }
-      onToggleTag(trimmedNewTag); // Add to current message
-      setNewTagInput("");
-      setIsOpen(false);
+      setNewTagInput(""); // Clear the input field
+      inputRef.current?.focus(); // Refocus the input field
     }
   };
 
