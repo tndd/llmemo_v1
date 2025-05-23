@@ -4,7 +4,7 @@ import React from "react";
 // For now, let's outline the tests conceptually as if we could render and inspect.
 
 // Mock SidebarLayout to prevent issues with its internal rendering logic in this unit test
-jest.mock("../SidebarLayout", () => {
+jest.mock("../../../SidebarLayout", () => {
   // A simple functional component that renders its children
   return jest.fn(({ children }) => <div>{children}</div>);
 });

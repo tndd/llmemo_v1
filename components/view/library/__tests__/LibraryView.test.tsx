@@ -1,9 +1,9 @@
-// components/library/LibraryView.test.tsx
+// components/view/library/__tests__/LibraryView.test.tsx
 import React from "react";
 import { Message } from "@/types";
 
 // Mock child components to focus on LibraryView's logic
-jest.mock("./LibrarySidebar", () => {
+jest.mock("../LibrarySidebar", () => {
   // Mock that captures props and simulates onSelectTag call
   return jest.fn(({ onSelectTag, selectedTag, allTags }) => (
     <div data-testid="mock-library-sidebar">
@@ -24,7 +24,7 @@ jest.mock("./LibrarySidebar", () => {
   ));
 });
 
-jest.mock("../home/MessageList", () => {
+jest.mock("../../../message/MessageList", () => {
   // Mock that captures props
   return jest.fn(({ messages, selectedTag }) => (
     <div data-testid="mock-message-list">
