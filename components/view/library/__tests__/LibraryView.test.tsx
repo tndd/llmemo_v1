@@ -34,7 +34,7 @@ jest.mock("../../../message/MessageList", () => {
       </span>
       {/* Render message texts to allow some verification */}
       <ul>
-        {messages.map((msg) => (
+        {messages.map((msg: Message) => (
           <li key={msg.id}>{msg.text}</li>
         ))}
       </ul>
@@ -190,7 +190,7 @@ describe("LibraryView Logic (Conceptual)", () => {
         handleSelectTag("#test"); // Simulate selecting '#test'
         const filteredMessages = selectedTag
           ? sampleMessages.filter(
-              (msg) => msg.tags && msg.tags.includes(selectedTag),
+              (msg) => msg.tags?.includes(selectedTag as string) ?? false,
             )
           : sampleMessages;
         return {
@@ -232,7 +232,7 @@ describe("LibraryView Logic (Conceptual)", () => {
       handleSelectTag("#test"); // Deselect
       const filteredMessages = selectedTag
         ? sampleMessages.filter(
-            (msg) => msg.tags && msg.tags.includes(selectedTag),
+            (msg) => msg.tags?.includes(selectedTag as string) ?? false,
           )
         : sampleMessages;
       return {
