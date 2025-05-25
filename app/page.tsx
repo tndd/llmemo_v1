@@ -16,45 +16,31 @@ import {
 } from "@/lib/types";
 
 // Function to get all unique tag names from all tracks in all memos
-const getAllUniqueTagNamesFromMemos = (
-  memos: Memo[],
-): Set<string> => {
+const getAllUniqueTagNamesFromMemos = (memos: Memo[]): Set<string> => {
   const tagNames = new Set<string>();
   memos.forEach((memo) => {
     if (memo.tracks) {
       memo.tracks.forEach((track: Track) => {
-        track.tags?.forEach((tag: TrackTag) =>
-          tagNames.add(tag.tagName),
-        );
+        track.tags?.forEach((tag: TrackTag) => tagNames.add(tag.tagName));
       });
     }
   });
   return tagNames;
 };
 
-const categorizeMemosByDate = (
-  memos: Memo[],
-): CategorizedMemos => {
+const categorizeMemosByDate = (memos: Memo[]): CategorizedMemos => {
   const now = new Date();
-  const today = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-  );
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
   const sevenDaysAgo = new Date(today);
   sevenDaysAgo.setDate(today.getDate() - 7);
-  const firstDayOfMonth = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    1,
-  );
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
   const categorized: CategorizedMemos = {
     Today: [],
     Yesterday: [],
-    "Previous 7 Days": [],
+    "This Week": [],
     "This Month": [],
     Older: [],
   };
@@ -66,7 +52,7 @@ const categorizeMemosByDate = (
     } else if (memoDate >= yesterday) {
       categorized.Yesterday.push(memo);
     } else if (memoDate >= sevenDaysAgo) {
-      categorized["Previous 7 Days"].push(memo);
+      categorized["This Week"].push(memo);
     } else if (memoDate >= firstDayOfMonth) {
       categorized["This Month"].push(memo);
     } else {
@@ -78,8 +64,7 @@ const categorizeMemosByDate = (
   for (const category of MEMO_DATE_CATEGORIES) {
     categorized[category].sort(
       (a, b) =>
-        new Date(b.updatedAt).getTime() -
-        new Date(a.updatedAt).getTime(),
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     );
   }
 
@@ -91,7 +76,8 @@ export default function Home() {
   const [memos, setMemos] = useState<Memo[]>([]);
   const [activeMemoId, setActiveMemoId] = useState<string | null>(null);
   const [allAvailableTags, setAllAvailableTags] = useState<string[]>([]);
-  const [availableTagNamesForActiveMemo, setAvailableTagNamesForActiveMemo] = useState<Set<string>>(new Set());
+  const [availableTagNamesForActiveMemo, setAvailableTagNamesForActiveMemo] =
+    useState<Set<string>>(new Set());
 
   const initializeDefaultMemo = () => {
     const initialMemoId = Date.now().toString();
@@ -115,22 +101,28 @@ export default function Home() {
         const parsedMemos: any[] = JSON.parse(storedMemos);
 
         if (!Array.isArray(parsedMemos)) {
-          console.error("Stored memos is not an array, initializing default.");
+          console.error(
+            "Stored memos is not an array, initializing default.",
+          );
           initializeDefaultMemo();
           return;
         }
 
         const fullyInitializedMemos = parsedMemos.map((memo: any): Memo => {
-          const tracks = (Array.isArray(memo.tracks) ? memo.tracks : []).map((track: any): Track => ({
-            id: track.id ?? Date.now() + Math.random(),
-            user: track.user ?? "Your Name",
-            time: track.time ?? new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
+          const tracks = (Array.isArray(memo.tracks) ? memo.tracks : []).map(
+            (track: any): Track => ({
+              id: track.id ?? Date.now() + Math.random(),
+              user: track.user ?? "Your Name",
+              time:
+                track.time ??
+                new Date().toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }),
+              text: track.text ?? "",
+              tags: Array.isArray(track.tags) ? track.tags : [],
             }),
-            text: track.text ?? "",
-            tags: Array.isArray(track.tags) ? track.tags : [],
-          }));
+          );
           return {
             id: memo.id ?? Date.now().toString() + Math.random().toString(),
             title: memo.title ?? "新しいメモ",
@@ -144,7 +136,10 @@ export default function Home() {
 
         if (fullyInitializedMemos.length > 0) {
           const lastActiveMemoId = localStorage.getItem("activeMemoId");
-          if (lastActiveMemoId && fullyInitializedMemos.find(m => m.id === lastActiveMemoId)) {
+          if (
+            lastActiveMemoId &&
+            fullyInitializedMemos.find((m) => m.id === lastActiveMemoId)
+          ) {
             setActiveMemoId(lastActiveMemoId);
           } else {
             setActiveMemoId(fullyInitializedMemos[0].id);
@@ -153,7 +148,10 @@ export default function Home() {
           initializeDefaultMemo();
         }
       } catch (error) {
-        console.error("Failed to parse memos from localStorage or data malformed:", error);
+        console.error(
+          "Failed to parse memos from localStorage or data malformed:",
+          error,
+        );
         initializeDefaultMemo();
       }
     } else {
@@ -176,9 +174,7 @@ export default function Home() {
   }, [activeMemoId]);
 
   useEffect(() => {
-    const currentActiveMemo = memos.find(
-      (memo) => memo.id === activeMemoId,
-    );
+    const currentActiveMemo = memos.find((memo) => memo.id === activeMemoId);
     if (currentActiveMemo) {
       const currentMemoTagNames = new Set<string>();
       currentActiveMemo.tracks.forEach((track: Track) => {
@@ -223,10 +219,7 @@ export default function Home() {
           id:
             prevMemos
               .flatMap((m) => m.tracks)
-              .reduce(
-                (maxId, trk) => Math.max(maxId, trk.id),
-                0,
-              ) + 1,
+              .reduce((maxId, trk) => Math.max(maxId, trk.id), 0) + 1,
           user: "Your Name",
           time: new Date().toLocaleTimeString([], {
             hour: "2-digit",
@@ -247,10 +240,7 @@ export default function Home() {
     );
   };
 
-  const handleToggleTag = (
-    trackId: number,
-    tagName: string,
-  ) => {
+  const handleToggleTag = (trackId: number, tagName: string) => {
     setMemos((prevMemos) =>
       prevMemos.map((memo) => {
         const trackExistsInMemo = memo.tracks.some(
@@ -269,9 +259,7 @@ export default function Home() {
           );
 
           if (tagIndex >= 0) {
-            const updatedTags = currentTags.filter(
-              (_, i) => i !== tagIndex,
-            );
+            const updatedTags = currentTags.filter((_, i) => i !== tagIndex);
             return {
               ...trk,
               tags: updatedTags,
@@ -343,7 +331,9 @@ export default function Home() {
       )}
       {currentView === "library" && (
         <LibraryView
-          allTracks={memos.flatMap((memo) => memo.tracks ? memo.tracks : [])}
+          allTracks={memos.flatMap((memo) =>
+            memo.tracks ? memo.tracks : [],
+          )}
           allTags={allAvailableTags}
           onToggleTag={handleToggleTag}
           onAddNewGlobalTag={handleAddNewTagGlobally}

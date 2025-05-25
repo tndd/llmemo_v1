@@ -13,14 +13,14 @@ export interface Track {
 export type MemoDateCategory =
   | "Today"
   | "Yesterday"
-  | "Previous 7 Days"
+  | "This Week"
   | "This Month"
   | "Older";
 
 export const MEMO_DATE_CATEGORIES: MemoDateCategory[] = [
   "Today",
   "Yesterday",
-  "Previous 7 Days",
+  "This Week",
   "This Month",
   "Older",
 ];
@@ -28,7 +28,7 @@ export const MEMO_DATE_CATEGORIES: MemoDateCategory[] = [
 export interface CategorizedMemos {
   Today: Memo[];
   Yesterday: Memo[];
-  "Previous 7 Days": Memo[];
+  "This Week": Memo[];
   "This Month": Memo[];
   Older: Memo[];
 }
